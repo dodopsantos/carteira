@@ -1,0 +1,7 @@
+[
+  { "title": "Página Inicial", "to": "/" },
+  { "title": "Adoção", "to": "/adocao" },
+  { "title": "Doentes", "to": "/doentes" },
+  { "title": "Contato", "to": "/contato" },
+  { "title": "Sobre", "to": "/sobre" }
+]
