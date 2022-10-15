@@ -8,11 +8,13 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "deploy-storybook": "storybook-to-ghpages"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.0.0",
     "@radix-ui/react-slot": "^1.0.0",
+    "@storybook/storybook-deployer": "^2.8.12",
     "clsx": "^1.2.1",
     "next": "12.2.4",
     "next-images": "^1.8.4",
