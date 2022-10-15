@@ -1,12 +1,10 @@
 import React from 'react';
-import BannerSection from './components/BannerSection';
-import InfoSection from './components/InfoSection';
+import { Text } from '@components/Text';
 
 export default function Home(): JSX.Element {
   return (
     <div>
-      <BannerSection />
-      <InfoSection />
+      <Text />
     </div>
   );
 }
