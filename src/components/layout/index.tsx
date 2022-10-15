@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import Navbar from '@components/layout/components/Navbar';
 import Footer from '@components/layout/components/Footer';
 
-export default function Home({ children }): ReactElement {
+export default function Layout({ children }): ReactElement {
   return (
     <div className="min-h-screen flex-col font-open-sans">
       <Navbar />
