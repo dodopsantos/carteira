@@ -1,4 +1,4 @@
-import React from 'react';
+import { FormEvent, useState } from 'react';
 import { Text } from '@components/Text';
 import { Logo } from '@assets/logo';
 import { Heading } from '@components/Heading';
@@ -7,7 +7,14 @@ import { Envelope, Lock } from 'phosphor-react';
 import { Checkbox } from '@components/Checkbox';
 import { Button } from '@components/Button';
 
-export default function Login(): JSX.Element {
+export function Login() {
+  const [isUserSigned, setIsUseSigned] = useState(false);
+
+  function handleSignIn(event: FormEvent) {
+    event.preventDefault();
+    setIsUseSigned(true);
+  }
+
   return (
     <div className="w-screen h-screen bg-gray-900 flex flex-col items-center justify-center text-gray-100">
       <header className="flex flex-col items-center">
@@ -20,7 +27,11 @@ export default function Login(): JSX.Element {
         </Text>
       </header>
 
-      <form className="flex flex-col gap-4 items-stretch w-full max-w-sm mt-10">
+      <form
+        onSubmit={handleSignIn}
+        className="flex flex-col gap-4 items-stretch w-full max-w-sm mt-10"
+      >
+        {isUserSigned && <Text>Logado</Text>}
         <label htmlFor="email" className="flex flex-col gap-3">
           <Text className="font-semibold">Endereço de e-mail</Text>
           <TextInput.Root>
@@ -34,7 +45,7 @@ export default function Login(): JSX.Element {
             />
           </TextInput.Root>
         </label>
-        <label htmlFor="email" className="flex flex-col gap-3">
+        <label htmlFor="password" className="flex flex-col gap-3">
           <Text className="font-semibold">Sua senha</Text>
           <TextInput.Root>
             <TextInput.Icon>
