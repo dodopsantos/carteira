@@ -1,4 +1,6 @@
-import { FormEvent, useState } from 'react';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+
+import { ErrorMessage } from '@hookform/error-message';
 import { Text } from '@components/Text';
 import { Logo } from '@assets/logo';
 import { Heading } from '@components/Heading';
@@ -7,13 +9,22 @@ import { Envelope, Lock } from 'phosphor-react';
 import { Checkbox } from '@components/Checkbox';
 import { Button } from '@components/Button';
 
-export function Login() {
-  const [isUserSigned, setIsUseSigned] = useState(false);
+type Inputs = {
+  email: string;
+  password: string;
+  remember: any;
+};
 
-  function handleSignIn(event: FormEvent) {
-    event.preventDefault();
-    setIsUseSigned(true);
-  }
+export function Login({ signIn }) {
+  const {
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm<Inputs>({
+    defaultValues: { remember: false }
+  });
+
+  const onSubmit: SubmitHandler<Inputs> = data => signIn(data);
 
   return (
     <div className="w-screen h-screen bg-gray-900 flex flex-col items-center justify-center text-gray-100">
@@ -28,38 +39,86 @@ export function Login() {
       </header>
 
       <form
-        onSubmit={handleSignIn}
+        onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 items-stretch w-full max-w-sm mt-10"
       >
-        {isUserSigned && <Text>Logado</Text>}
         <label htmlFor="email" className="flex flex-col gap-3">
-          <Text className="font-semibold">Endereço de e-mail</Text>
+          <div className="flex justify-between">
+            <Text className="font-semibold">Endereço de e-mail</Text>
+            <ErrorMessage
+              errors={errors}
+              name="email"
+              render={({ message }) => (
+                <Text className="font-semibold text-teal-300" size="sm">
+                  {message}
+                </Text>
+              )}
+            />
+          </div>
           <TextInput.Root>
             <TextInput.Icon>
               <Envelope />
             </TextInput.Icon>
-            <TextInput.Input
-              id="email"
-              type="email"
-              placeholder="Digite seu e-mail"
+            <Controller
+              name="email"
+              control={control}
+              rules={{ required: 'Preencha o campo' }}
+              render={({ field }) => (
+                <TextInput.Input
+                  id="email"
+                  type="email"
+                  placeholder="Digite seu e-mail"
+                  {...field}
+                />
+              )}
             />
           </TextInput.Root>
         </label>
         <label htmlFor="password" className="flex flex-col gap-3">
-          <Text className="font-semibold">Sua senha</Text>
+          <div className="flex justify-between">
+            <Text className="font-semibold">Sua senha</Text>
+            <ErrorMessage
+              errors={errors}
+              name="password"
+              render={({ message }) => (
+                <Text className="font-semibold text-teal-300" size="sm">
+                  {message}
+                </Text>
+              )}
+            />
+          </div>
           <TextInput.Root>
             <TextInput.Icon>
               <Lock />
             </TextInput.Icon>
-            <TextInput.Input
-              id="password"
-              type="password"
-              placeholder="******"
+            <Controller
+              name="password"
+              control={control}
+              rules={{ required: 'Preencha o campo' }}
+              render={({ field }) => (
+                <TextInput.Input
+                  id="password"
+                  type="password"
+                  placeholder="******"
+                  {...field}
+                />
+              )}
             />
           </TextInput.Root>
         </label>
         <label htmlFor="remember" className="flex items-center gap-2">
-          <Checkbox id="remember" />
+          <Controller
+            name="remember"
+            control={control}
+            render={({ field: props }) => (
+              <Checkbox
+                onCheckedChange={e => props.onChange(e)}
+                checked={props.value}
+                id="remember"
+                {...props}
+              />
+            )}
+          />
           <Text size="sm" className="text-gray-200">
             Lembrar de mim por 30 dias
           </Text>

@@ -13,16 +13,20 @@
     "test-storybook": "test-storybook"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.0",
     "@radix-ui/react-checkbox": "^1.0.0",
     "@radix-ui/react-slot": "^1.0.0",
     "@storybook/addon-a11y": "^6.5.12",
     "@storybook/storybook-deployer": "^2.8.12",
+    "axios": "^1.1.3",
     "clsx": "^1.2.1",
     "next": "12.2.4",
     "next-images": "^1.8.4",
+    "nookies": "^2.5.2",
     "phosphor-react": "^1.4.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.38.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
