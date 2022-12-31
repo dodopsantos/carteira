@@ -17,7 +17,9 @@ export default function NavItem({ title, to }): ReactElement<INavItemProps> {
   return (
     <li
       className={`${
-        isCurrentRoute(to) ? 'bg-sky-600 md:bg-sky-700' : 'md:hover:bg-sky-500 '
+        isCurrentRoute(to)
+          ? 'bg-teal-600 md:bg-teal-700'
+          : 'md:hover:bg-teal-500 '
       } rounded flex md:mb-0 mb-1 last:mb-0 transition ease-in-out delay-40 hover:scale-105`}
     >
       <Link href={to}>

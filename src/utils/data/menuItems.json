@@ -1,7 +1,7 @@
 [
   { "title": "Página Inicial", "to": "/" },
-  { "title": "Adoção", "to": "/adocao" },
-  { "title": "Doentes", "to": "/doentes" },
-  { "title": "Contato", "to": "/contato" },
-  { "title": "Sobre", "to": "/sobre" }
+  { "title": "Doação", "to": "/adocao" },
+  { "title": "Mercado", "to": "/doentes" },
+  { "title": "Perfil", "to": "/contato" },
+  { "title": "Sair", "to": "/logout" }
 ]

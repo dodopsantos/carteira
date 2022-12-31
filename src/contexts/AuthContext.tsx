@@ -1,18 +1,18 @@
 import { createContext, useEffect, useState } from 'react';
 import { setCookie, parseCookies } from 'nookies';
+import { sha256 } from 'js-sha256';
 import Router from 'next/router';
-import { recoverUserInformation, signInRequest } from '@services/auth';
+
+import { recoverUserInformation } from '@services/auth';
+import { api } from '@services/api';
 
 type User = {
-  name: string;
-  email: string;
-  avatar_url: string;
+  username: string;
 };
 
 type signInData = {
-  email: string;
   password: string;
-  remember: boolean;
+  username: string;
 };
 
 type AuthContextType = {
@@ -28,24 +28,28 @@ export function AuthProvider({ children }) {
   const isAuthenticated = !!user;
 
   useEffect(() => {
-    const { 'wallet-token': token } = parseCookies();
+    const { 'nextauth-token': token } = parseCookies();
     if (token) {
       recoverUserInformation().then(response => setUser(response.user));
     }
   }, []);
 
-  async function signIn({ email, password, remember }: signInData) {
-    const { token, user } = await signInRequest({
-      email,
-      password,
-      remember
-    });
+  async function signIn({ password, username }: signInData) {
+    // const response = await api.post('/oauth/token', {
+    //   grant_type: 'password',
+    //   username,
+    //   password: sha256(password)
+    // });
 
-    setCookie(undefined, 'wallet-token', token, {
-      maxAge: 60 * 60 * 24 // 24 hours
-    });
+    // setCookie(undefined, 'nextauth-token', response?.data?.access_token, {
+    //   expires: response?.data?.expires_in
+    // });
 
-    setUser(user);
+    // api.defaults.headers[
+    //   'Authorization'
+    // ] = `Bearer ${response?.data?.access_token}`;
+
+    setUser({ username });
     Router.push('/');
   }
 

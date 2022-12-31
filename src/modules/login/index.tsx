@@ -5,12 +5,12 @@ import { Text } from '@components/Text';
 import { Logo } from '@assets/logo';
 import { Heading } from '@components/Heading';
 import { TextInput } from '@components/TextInput';
-import { Envelope, Lock } from 'phosphor-react';
+import { Lock, User } from 'phosphor-react';
 import { Checkbox } from '@components/Checkbox';
 import { Button } from '@components/Button';
 
 type Inputs = {
-  email: string;
+  username: string;
   password: string;
   remember: any;
 };
@@ -42,12 +42,12 @@ export function Login({ signIn }) {
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 items-stretch w-full max-w-sm mt-10"
       >
-        <label htmlFor="email" className="flex flex-col gap-3">
+        <label htmlFor="username" className="flex flex-col gap-3">
           <div className="flex justify-between">
             <Text className="font-semibold">Endereço de e-mail</Text>
             <ErrorMessage
               errors={errors}
-              name="email"
+              name="username"
               render={({ message }) => (
                 <Text className="font-semibold text-teal-300" size="sm">
                   {message}
@@ -57,17 +57,17 @@ export function Login({ signIn }) {
           </div>
           <TextInput.Root>
             <TextInput.Icon>
-              <Envelope />
+              <User />
             </TextInput.Icon>
             <Controller
-              name="email"
+              name="username"
               control={control}
               rules={{ required: 'Preencha o campo' }}
               render={({ field }) => (
                 <TextInput.Input
-                  id="email"
-                  type="email"
-                  placeholder="Digite seu e-mail"
+                  id="username"
+                  type="text"
+                  placeholder="Digite seu usuário"
                   {...field}
                 />
               )}
