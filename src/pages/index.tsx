@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import { parseCookies } from 'nookies';
 import { getAPIClient } from '@services/axios';
 
-export default function Home({ rank }): JSX.Element {
+export default function Home({ rank }: any): JSX.Element {
   return (
     <div>
       <main>

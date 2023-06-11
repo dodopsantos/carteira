@@ -27,17 +27,17 @@ export default function NavMenu(): ReactElement {
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            fill-rule="evenodd"
+            fillRule="evenodd"
             d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-            clip-rule="evenodd"
+            clipRule="evenodd"
           ></path>
         </svg>{' '}
       </button>
       {/*desktop*/}
       <div className="hidden w-full lg:block lg:w-auto" id="navbar-default">
         <ul className="flex flex-col lg:flex-row lg:space-x-8 lg:mt-0 lg:text-sm lg:font-medium lg:border-0">
-          {menuItems.map(item => (
-            <NavItem title={item.title} to={item.to} />
+          {menuItems.map((item, key) => (
+            <NavItem key={key} title={item.title} to={item.to} />
           ))}
         </ul>
       </div>
@@ -48,8 +48,8 @@ export default function NavMenu(): ReactElement {
           id="navbar-default"
         >
           <ul className="flex flex-col p-4 lg:flex-row lg:space-x-8 lg:mt-0 lg:text-sm lg:font-medium lg:border-0">
-            {menuItems.map(item => (
-              <NavItem title={item.title} to={item.to} />
+            {menuItems.map((item, key) => (
+              <NavItem key={key} title={item.title} to={item.to} />
             ))}
           </ul>
         </div>

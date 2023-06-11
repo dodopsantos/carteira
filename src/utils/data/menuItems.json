@@ -1,7 +1,7 @@
 [
-  { "title": "Página Inicial", "to": "/" },
-  { "title": "Doação", "to": "/adocao" },
+  { "title": "início", "to": "/#first-section" },
+  { "title": "Novidades", "to": "/#second-section" },
   { "title": "Mercado", "to": "/doentes" },
-  { "title": "Perfil", "to": "/contato" },
-  { "title": "Sair", "to": "/logout" }
+  { "title": "Discord", "to": "/contato" },
+  { "title": "Doação", "to": "/logout" }
 ]

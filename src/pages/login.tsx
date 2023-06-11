@@ -32,15 +32,14 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     maxAge: res?.data?.expires_in
   });
 
-  console.log(res.data);
-  // if (token) {
-  //   return {
-  //     redirect: {
-  //       destination: '/',
-  //       permanent: false
-  //     }
-  //   };
-  // }
+  if (token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    };
+  }
 
   return {
     props: {}
