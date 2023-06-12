@@ -1,7 +1,6 @@
 [
-  { "title": "início", "to": "/#first-section" },
-  { "title": "Novidades", "to": "/#second-section" },
-  { "title": "Mercado", "to": "/doentes" },
-  { "title": "Discord", "to": "/contato" },
+  { "title": "início", "to": "/" },
+  { "title": "Mercado", "to": "/market" },
+  { "title": "Discord", "to": "https://discord.gg/wXKQk8QtwK" },
   { "title": "Doação", "to": "/logout" }
 ]

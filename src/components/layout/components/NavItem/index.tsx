@@ -9,7 +9,6 @@ interface INavItemProps {
 
 export default function NavItem({ title, to }): ReactElement<INavItemProps> {
   const router = useRouter();
-
   function isCurrentRoute(route: string): boolean {
     return router.asPath === route;
   }
@@ -22,7 +21,7 @@ export default function NavItem({ title, to }): ReactElement<INavItemProps> {
           : 'md:hover:bg-teal-500 '
       } rounded flex md:mb-0 mb-1 last:mb-0 transition ease-in-out delay-40 hover:scale-105`}
     >
-      <Link href={to} scroll={false}>
+      <Link href={to}>
         <a
           className="font-bold text-white w-full h-full rounded p-2"
           aria-current="page"

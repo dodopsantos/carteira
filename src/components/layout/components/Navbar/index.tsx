@@ -14,7 +14,7 @@ export default function Navbar(): ReactElement {
             </h1> */}
             {/* <img src= alt="Logo" /> */}
             <Image
-              src={'/ravendawn-logo.png'}
+              src={'/SOF.png'}
               alt="Picture of the author"
               width={163}
               height={44}

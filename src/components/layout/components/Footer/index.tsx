@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function Footer(): ReactElement {
   return (
-    <div className="flex h-36 bg-teal-600 px-5 sm:px-20 items-center justify-between">
+    <div className="flex h-36 bg-gray-700 px-5 sm:px-20 items-center justify-between">
       <Image
         alt="Logo"
         src="/bleachLogo.png"
