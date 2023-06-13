@@ -1,15 +1,14 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import effects from '@utils/data/effects.json';
+import dynamic from 'next/dynamic';
+const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
 
 export default function Effects(): ReactElement {
   const [activated, setActivated] = useState(0);
-  const [source, setSource] = useState(effects[0].source);
+  const [source, setSource] = useState('/luck.mkv');
 
   useEffect(() => {
-    setSource(null);
-    setTimeout(() => {
-      setSource(effects[activated].source);
-    }, 1);
+    setSource(effects[activated].source);
   }, [activated]);
 
   return (
@@ -39,17 +38,13 @@ export default function Effects(): ReactElement {
           <p className="text-base text-justify mx-auto my-4 max-h-1/5">
             {effects[activated].description}
           </p>
-          {source && (
-            <video
-              className="max-h-3/5 mx-auto my-0"
-              autoPlay
-              muted
-              playsInline
-              loop
-            >
-              <source src={source} type="video/webm" />
-            </video>
-          )}
+          <ReactPlayer
+            className="max-h-3/5 mx-auto my-0"
+            url={source}
+            width="100%"
+            height="100%"
+            controls={true}
+          />
         </div>
       </div>
     </div>
