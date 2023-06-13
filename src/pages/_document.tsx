@@ -25,10 +25,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
             rel="stylesheet"
           />
-          <link
-            rel="icon"
-            href="https://patasamigas.atlassian.net/rest/api/2/universal_avatar/view/type/project/avatar/10551?size=xxlarge"
-          />
+          <link rel="icon" href="/50.png" />
         </Head>
         <body>
           <Main />

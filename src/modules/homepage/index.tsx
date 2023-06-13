@@ -3,16 +3,17 @@ import BackgroundVideo from './components/backgroundVideo';
 import MenuInfo from './components/menuInfo';
 import Carousel from './components/carousel';
 import Image from 'next/image';
+import Effects from './components/effects';
 
 export default function Homepage({ rank }): JSX.Element {
   console.log(rank);
   return (
     <>
-      <section className="h-screen md:bg-gray-900 flex items-center justify-center text-gray-100">
+      <section className="min-h-screen md:bg-gray-900 flex items-center justify-center text-gray-100">
         <BackgroundVideo />
         <MenuInfo />
       </section>
-      <section className="relative text-center h-screen bg-[url('/backgroundNews.jpg')]  flex justify-center text-gray-100 z-1 before:bg-[url('/module.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-7 before:z-1 before:top-0 before:left-0 before:bg-contain after:bg-[url('/module.webp')] after:absolute after:bg-repeat-x after:block after:w-full after:h-7 after:z-1 after:bottom-0 after:left-0 after:bg-contain">
+      <section className="min-h-screen relative text-center min-h-screen bg-[url('/backgroundNews.jpg')]  flex justify-center text-gray-100 z-1 before:bg-[url('/module.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-7 before:z-1 before:top-0 before:left-0 before:bg-contain after:bg-[url('/module.webp')]">
         <div className="pt-24 pb-36 px-6">
           <h2 className="text-center uppercase text-2xl">
             Explore um mundo de aventuras
@@ -36,7 +37,7 @@ export default function Homepage({ rank }): JSX.Element {
           <Carousel />
         </div>
       </section>
-      <section className="relative text-center h-screen bg-[url('/mechanics.jpg')]  flex justify-center text-gray-100 z-1 after:bg-[url('/module.webp')] after:absolute after:bg-repeat-x after:block after:w-full after:h-7 after:z-1 after:bottom-0 after:left-0 after:bg-contain">
+      <section className="relative text-center min-h-screen bg-[url('/mechanics.jpg')]  flex justify-center text-gray-100 before:bg-[url('/module.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-7 before:z-1 before:top-0 before:left-0 before:bg-contain">
         <div className="pt-24 pb-36 px-6">
           <h2 className="text-center uppercase text-2xl">
             Mêcanicas e efeitos únicos
@@ -48,6 +49,7 @@ export default function Homepage({ rank }): JSX.Element {
             height={100}
             quality={100}
           />
+          <Effects />
         </div>
       </section>
     </>

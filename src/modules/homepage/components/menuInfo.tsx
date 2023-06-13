@@ -3,17 +3,19 @@ import React, { ReactElement } from 'react';
 
 export default function MenuInfo(): ReactElement {
   return (
-    <div className="flex justify-center align-center flex-col max-w-3xl z-10 bg-gray-900/30 p-6 rounded">
+    <div className="flex justify-center align-center flex-col max-w-3xl z-10 p-6 rounded">
       <picture className="flex justify-center">
-        <img src="/SOF.png" className="header__logo" alt="Ravendawn Logo" />
+        <img src="/SOF2.png" className="header__logo" alt="Ravendawn Logo" />
       </picture>
-      <h1 className="text-2xl mb-5 text-center">
-        Explore um Mundo Totalmente Novo!
-      </h1>
-      <p className="mb-16 text-center text-xl">
-        Uma experiência épica de MMORPG, focada em jogabilidade, comunidade e no
-        design único do Bleach!
-      </p>
+      <div className="bg-gray-900/70 mb-16 rounded">
+        <h1 className="text-2xl mb-5 text-center">
+          Explore um Mundo Totalmente Novo!
+        </h1>
+        <p className=" text-center text-xl">
+          Uma experiência épica de MMORPG, focada em jogabilidade, comunidade e
+          no design único do Bleach!
+        </p>
+      </div>
       <div className="flex justify-around mb-14">
         <a
           className="flex gap-x-5 rounded border-2 border-solid text-white hover:text-yellow border-white hover:border-yellow bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 w-2/5 text-center justify-center"

@@ -24,7 +24,7 @@ export function Login({ signIn }) {
     defaultValues: { remember: false }
   });
 
-  const onSubmit: SubmitHandler<Inputs> = data => signIn(data);
+  const onSubmit: SubmitHandler<Inputs> = data => console.log(data); //signIn(data);
 
   return (
     <div className="w-screen h-screen bg-gray-900 flex flex-col items-center justify-center text-gray-100">

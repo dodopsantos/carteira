@@ -2,13 +2,13 @@ import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const images = [
+  '/image7.png',
   '/image1.png',
   '/image4.png',
   '/image6.png',
   '/image2.png',
   '/image3.png',
-  '/image5.png',
-  '/image7.png'
+  '/image5.png'
 ];
 
 export default function Carousel(): ReactElement {
@@ -35,7 +35,7 @@ export default function Carousel(): ReactElement {
           transition={{ duration: 0.8 }}
         >
           {images.map((image, index) => (
-            <motion.div className="min-h-[300px] min-w-[500px] p-4" key={index}>
+            <motion.div className="min-h-[400px] min-w-[527px] p-4" key={index}>
               <img
                 className="w-full h-11/12 rounded pointer-events-none"
                 src={image}
