@@ -21,14 +21,14 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   const { ['nextauth-token']: token } = parseCookies(ctx);
   const api = getAPIClient(ctx);
 
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false
-      }
-    };
-  }
+  // if (!token) {
+  //   return {
+  //     redirect: {
+  //       destination: '/login',
+  //       permanent: false
+  //     }
+  //   };
+  // }
 
   // const { data: rank } = await api.get('/v1/players/rank');
 
