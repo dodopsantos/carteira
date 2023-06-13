@@ -30,11 +30,11 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     };
   }
 
-  const { data: rank } = await api.get('/v1/players/rank');
+  // const { data: rank } = await api.get('/v1/players/rank');
 
   return {
     props: {
-      rank: rank
+      rank: null
     }
   };
 };

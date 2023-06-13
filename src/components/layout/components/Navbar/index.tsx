@@ -8,7 +8,7 @@ export default function Navbar(): ReactElement {
     <nav className="fixed p-2.5 w-full z-20">
       <div className="flex h-[70px] rounded-md justify-between items-center px-5 md:px-20px bg-header">
         <Link href="/">
-          <a href="http://localhost:3000" className="flex items-center">
+          <a href="/" className="flex items-center">
             {/* <h1 className="font-bold text-white text-2xl cursor-pointer">
               Soul Reaper
             </h1> */}

@@ -22,15 +22,15 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   const { ['nextauth-token']: token } = parseCookies(ctx);
   const api = getAPIClient(ctx);
 
-  const res = await api.post('/oauth/token', {
-    grant_type: 'password',
-    username: 'admin',
-    password: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'
-  });
+  // const res = await api.post('/oauth/token', {
+  //   grant_type: 'password',
+  //   username: 'admin',
+  //   password: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'
+  // });
 
-  setCookie(ctx, 'nextauth-token', res?.data?.access_token, {
-    maxAge: res?.data?.expires_in
-  });
+  // setCookie(ctx, 'nextauth-token', res?.data?.access_token, {
+  //   maxAge: res?.data?.expires_in
+  // });
 
   if (token) {
     return {
