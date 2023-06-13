@@ -5,7 +5,7 @@ import Carousel from './components/carousel';
 import Image from 'next/image';
 import Effects from './components/effects';
 
-export default function Homepage({ rank }): JSX.Element {
+export default function Homepage({ rank }: any): JSX.Element {
   console.log(rank);
   return (
     <>

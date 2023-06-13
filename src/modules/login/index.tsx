@@ -1,3 +1,4 @@
+import React from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import { ErrorMessage } from '@hookform/error-message';
@@ -15,7 +16,7 @@ type Inputs = {
   remember: any;
 };
 
-export function Login({ signIn }) {
+export function Login({ signIn }: any) {
   const {
     handleSubmit,
     control,

@@ -1,4 +1,4 @@
-import { SVGAttributes } from 'react';
+import React, { SVGAttributes } from 'react';
 
 interface LogoProps extends SVGAttributes<HTMLOrSVGElement> {}
 

@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from 'react';
+import React, { ReactNode, useRef } from 'react';
 
 export interface TooltipProps {
   children: ReactNode;

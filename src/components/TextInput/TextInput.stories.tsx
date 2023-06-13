@@ -1,3 +1,4 @@
+import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { Envelope } from 'phosphor-react';
 import { TextInput, TextInputRootProps } from './index';
@@ -7,10 +8,10 @@ export default {
   component: TextInput.Root,
   args: {
     children: [
-      <TextInput.Icon>
+      <TextInput.Icon key={0}>
         <Envelope />
       </TextInput.Icon>,
-      <TextInput.Input placeholder="Type your e-mail address" />
+      <TextInput.Input key={0} placeholder="Type your e-mail address" />
     ]
   },
   argTypes: {

@@ -7,7 +7,7 @@ interface INavItemProps {
   to: string;
 }
 
-export default function NavItem({ title, to }): ReactElement<INavItemProps> {
+export default function NavItem({ title, to }: INavItemProps): ReactElement {
   const router = useRouter();
   function isCurrentRoute(route: string): boolean {
     return router.asPath === route;

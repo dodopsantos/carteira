@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { setCookie, parseCookies } from 'nookies';
 import { sha256 } from 'js-sha256';
 import Router from 'next/router';
@@ -23,7 +23,7 @@ type AuthContextType = {
 
 export const AuthContext = createContext({} as AuthContextType);
 
-export function AuthProvider({ children }) {
+export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<User | null>(null);
   const isAuthenticated = !!user;
 
