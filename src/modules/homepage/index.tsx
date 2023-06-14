@@ -5,8 +5,7 @@ import Carousel from './components/carousel';
 import Image from 'next/image';
 import Effects from './components/effects';
 
-export default function Homepage({ rank }: any): JSX.Element {
-  console.log(rank);
+export default function Homepage(): JSX.Element {
   return (
     <>
       <section className="min-h-screen bg-[url('/backgroundNews.jpg')] md:bg-none bg-gray-900 flex items-center justify-center text-gray-100">
