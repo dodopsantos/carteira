@@ -3,7 +3,7 @@ import React, { ReactElement } from 'react';
 
 export default function MenuInfo(): ReactElement {
   return (
-    <div className="flex justify-center align-center flex-col max-w-3xl z-10 p-6 rounded">
+    <div className="flex mt-12 md:mt-0 justify-center align-center flex-col max-w-3xl z-10 p-6 rounded">
       <picture className="flex justify-center">
         <img src="/SOF2.png" className="header__logo" alt="Ravendawn Logo" />
       </picture>
@@ -16,16 +16,16 @@ export default function MenuInfo(): ReactElement {
           no design único do Bleach!
         </p>
       </div>
-      <div className="flex justify-around mb-14">
+      <div className="flex flex-col gap-2 md:gap-0 md:flex-row justify-around mb-14">
         <a
-          className="flex gap-x-5 rounded border-2 border-solid text-white hover:text-yellow border-white hover:border-yellow bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 w-2/5 text-center justify-center"
+          className="flex gap-x-5 rounded border-2 border-solid text-white hover:text-yellow border-white hover:border-yellow bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 w-full md:w-2/5 text-center justify-center"
           href=""
         >
           <Image src="/AccountIcon.svg" width="25.89" height="25.89" />
           CRIE UMA CONTA
         </a>
         <a
-          className="flex gap-x-5 rounded border-2 border-solid text-white hover:text-yellow border-white hover:border-yellow bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 w-2/5 text-center justify-center"
+          className="flex gap-x-5 rounded border-2 border-solid text-white hover:text-yellow border-white hover:border-yellow bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 w-full md:w-2/5 text-center justify-center"
           href=""
         >
           <Image src="/download.svg" width="25.89" height="25.89" />
@@ -66,19 +66,19 @@ export default function MenuInfo(): ReactElement {
               height="60px"
               quality={100}
             />
-            <p className="text-sm font-normal uppercase">Beta interno</p>
+            <p className="text-sm font-normal md:uppercase">Beta interno</p>
           </li>
           <li className="relative min-w-28 gap-0.5 cursor-pointer text-center">
             <Image src="/bleachLogo.png" width={60} height={60} quality={100} />
-            <p className="text-sm font-normal uppercase">Beta fechado</p>
+            <p className="text-sm font-normal md:uppercase">Beta fechado</p>
           </li>
           <li className="relative min-w-28 gap-0.5 cursor-pointer text-center">
             <Image src="/incomplete.png" width={60} height={60} quality={100} />
-            <p className="text-sm font-normal uppercase">Beta aberto</p>
+            <p className="text-sm font-normal md:uppercase">Beta aberto</p>
           </li>
           <li className="relative min-w-28 gap-0.5 cursor-pointer text-center">
             <Image src="/incomplete.png" width={60} height={60} quality={100} />
-            <p className="text-sm font-normal uppercase">Lançamento</p>
+            <p className="text-sm font-normal md:uppercase">Lançamento</p>
           </li>
         </ul>
       </div>

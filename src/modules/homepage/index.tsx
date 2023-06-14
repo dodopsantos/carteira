@@ -9,7 +9,7 @@ export default function Homepage({ rank }: any): JSX.Element {
   console.log(rank);
   return (
     <>
-      <section className="min-h-screen md:bg-gray-900 flex items-center justify-center text-gray-100">
+      <section className="min-h-screen bg-[url('/backgroundNews.jpg')] md:bg-none bg-gray-900 flex items-center justify-center text-gray-100">
         <BackgroundVideo />
         <MenuInfo />
       </section>

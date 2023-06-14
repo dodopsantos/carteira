@@ -12,9 +12,9 @@ export default function Effects(): ReactElement {
   }, [activated]);
 
   return (
-    <div className="flex justify-center gap-12 w-[80vw] h-4/5">
+    <div className="block md:flex justify-center gap-12 w-full md:w-[80vw] h-4/5">
       <div className="w-1/5">
-        <ul className="w-full h-full rounded gap-2 flex flex-col">
+        <ul className="w-full h-full rounded md:gap-2 md:flex md:flex-col grid grid-rows-3 grid-flow-col gap-4">
           {effects.map((item, idx) => (
             <li
               key={idx}
@@ -30,7 +30,7 @@ export default function Effects(): ReactElement {
           ))}
         </ul>
       </div>
-      <div className="w-4/5 xl:w-3/5">
+      <div className="w-full md:w-4/5 xl:w-3/5 mt-4 md:mt-0">
         <div className="bg-gray-900/50 w-full rounded border-double border-4 border-teal-700 p-6">
           <h1 className="text-center uppercase text-xl max-h-1/5">
             {effects[activated].title}
@@ -39,7 +39,7 @@ export default function Effects(): ReactElement {
             {effects[activated].description}
           </p>
           <ReactPlayer
-            className="max-h-3/5 mx-auto my-0"
+            className="hidden md:block max-h-3/5 mx-auto my-0"
             url={source}
             width="100%"
             height="100%"

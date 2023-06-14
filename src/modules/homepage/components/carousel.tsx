@@ -20,7 +20,7 @@ export default function Carousel(): ReactElement {
   }, []);
 
   return (
-    <div className="w-full my-0 my-auto flex items-center justify-center max-w-[900px]">
+    <div className="w-full my-0 my-auto flex items-center justify-center max-w-[80vw] md:max-w-[60vw]">
       <motion.div
         ref={carousel}
         className="cursor-grab overflow-hidden"
