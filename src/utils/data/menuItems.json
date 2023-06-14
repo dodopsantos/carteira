@@ -1,6 +1,4 @@
 [
   { "title": "início", "to": "/" },
-  { "title": "Mercado", "to": "/market" },
-  { "title": "Discord", "to": "https://discord.gg/wXKQk8QtwK" },
-  { "title": "Doação", "to": "/logout" }
+  { "title": "Discord", "to": "https://discord.gg/wXKQk8QtwK" }
 ]

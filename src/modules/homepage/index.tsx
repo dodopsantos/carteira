@@ -37,10 +37,10 @@ export default function Homepage({ rank }: any): JSX.Element {
           <Carousel />
         </div>
       </section>
-      <section className="relative text-center min-h-screen bg-[url('/mechanics.jpg')]  flex justify-center text-gray-100 before:bg-[url('/module.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-7 before:z-1 before:top-0 before:left-0 before:bg-contain">
+      <section className="relative text-center min-h-screen bg-[#242424] bg-[url('/mechanics.jpg')] bg-bottom bg-no-repeat  flex justify-center text-gray-100 before:bg-[url('/module.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-7 before:z-1 before:top-0 before:left-0 before:bg-contain">
         <div className="pt-24 pb-36 px-6">
           <h2 className="text-center uppercase text-2xl">
-            Mêcanicas e efeitos únicos
+            Mecânicas e efeitos únicos
           </h2>
           <Image
             alt="Logo"
