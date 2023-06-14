@@ -25,7 +25,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
             rel="stylesheet"
           />
-          <link rel="icon" href="/50.png" />
+          <link rel="icon" href="/bleachLogo.png" />
         </Head>
         <body>
           <Main />
