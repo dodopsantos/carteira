@@ -5,7 +5,11 @@ export default function MenuInfo(): ReactElement {
   return (
     <div className="flex mt-[10vh] md:mt-0 justify-center align-center flex-col max-w-3xl z-10 p-6 rounded">
       <picture className="flex justify-center">
-        <img src="/SOF2.webp" className="header__logo" alt="Ravendawn Logo" />
+        <img
+          src="/SOF2.webp"
+          className="header__logo"
+          alt="Sword of Fate Logo"
+        />
       </picture>
       <div className="bg-gray-900/70 mb-16 rounded">
         <h1 className="text-2xl mb-5 text-center">
@@ -21,14 +25,24 @@ export default function MenuInfo(): ReactElement {
           className="flex gap-x-5 rounded border-2 border-solid text-white hover:text-yellow border-white hover:border-yellow bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 w-full md:w-2/5 text-center justify-center"
           href=""
         >
-          <Image src="/AccountIcon.svg" width="25.89" height="25.89" />
+          <Image
+            src="/AccountIcon.svg"
+            width="25.89"
+            height="25.89"
+            alt="Create"
+          />
           CRIE UMA CONTA
         </a>
         <a
           className="flex gap-x-5 rounded border-2 border-solid text-white hover:text-yellow border-white hover:border-yellow bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 w-full md:w-2/5 text-center justify-center"
           href=""
         >
-          <Image src="/download.svg" width="25.89" height="25.89" />
+          <Image
+            src="/download.svg"
+            width="25.89"
+            height="25.89"
+            alt="download"
+          />
           BAIXAR JOGO
         </a>
       </div>
@@ -65,6 +79,7 @@ export default function MenuInfo(): ReactElement {
               width="60px"
               height="60px"
               quality={100}
+              alt="logo"
             />
             <p className="text-sm font-normal md:uppercase">Beta interno</p>
           </li>
@@ -74,6 +89,7 @@ export default function MenuInfo(): ReactElement {
               width={60}
               height={60}
               quality={100}
+              alt="logo"
             />
             <p className="text-sm font-normal md:uppercase">Beta fechado</p>
           </li>
@@ -83,6 +99,7 @@ export default function MenuInfo(): ReactElement {
               width={60}
               height={60}
               quality={100}
+              alt="logo"
             />
             <p className="text-sm font-normal md:uppercase">Beta aberto</p>
           </li>
@@ -92,6 +109,7 @@ export default function MenuInfo(): ReactElement {
               width={60}
               height={60}
               quality={100}
+              alt="logo"
             />
             <p className="text-sm font-normal md:uppercase">Lançamento</p>
           </li>

@@ -40,6 +40,7 @@ export default function Homepage(): JSX.Element {
                 color="teal"
                 layout="fill"
                 objectFit="contain"
+                alt="arrows-left"
               />
             </div>
 
@@ -50,6 +51,7 @@ export default function Homepage(): JSX.Element {
                 color="teal"
                 layout="fill"
                 objectFit="contain"
+                alt="arrows-right"
               />
             </div>
           </div>

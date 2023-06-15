@@ -39,7 +39,7 @@ export default function Carousel(): ReactElement {
               <img
                 className="w-full h-11/12 rounded pointer-events-none"
                 src={image}
-                alt="alt"
+                alt="Game images"
               />
             </motion.div>
           ))}

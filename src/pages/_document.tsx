@@ -12,8 +12,12 @@ import Document, {
 export default class MyDocument extends Document {
   render(): JSX.Element {
     return (
-      <Html lang="pt">
+      <Html title="Sword of Fate" lang="pt">
         <Head>
+          <meta
+            name="description"
+            content="Sword of Fate é um jogo de RPG em 2d baseado no universo do anime Bleach"
+          />
           <meta charSet="utf-8" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
