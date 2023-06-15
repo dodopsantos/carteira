@@ -14,7 +14,7 @@ export default function Navbar(): ReactElement {
             </h1> */}
             {/* <img src= alt="Logo" /> */}
             <Image
-              src={'/SOF.png'}
+              src={'/SOF.webp'}
               alt="Picture of the author"
               width={163}
               height={44}

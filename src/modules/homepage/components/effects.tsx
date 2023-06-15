@@ -13,17 +13,17 @@ export default function Effects(): ReactElement {
 
   return (
     <div className="block md:flex justify-center gap-12 w-full md:w-[80vw] h-4/5">
-      <div className="w-1/5">
-        <ul className="w-full h-full rounded md:gap-2 md:flex md:flex-col grid grid-rows-3 grid-flow-col gap-4">
+      <div className="md:w-1/5 flex justify-center">
+        <ul className="w-full h-full rounded md:gap-2 md:flex md:flex-col grid grid-rows-3 grid-flow-col gap-2">
           {effects.map((item, idx) => (
             <li
               key={idx}
               onClick={() => setActivated(idx)}
-              className={`relative ${
+              className={`md:relative rounded text-xs md:text-sm ${
                 activated === idx
                   ? 'hover:bg-teal-600 p-2 bg-teal-700'
                   : 'hover:bg-gray-600 p-2 bg-gray-700 '
-              } cursor-pointer before:bg-[url('/label.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-1 before:top-0 before:left-0 before:bg-contain after:bg-[url('/label.webp')] after:absolute after:bg-repeat-x after:block after:w-full after:h-1 after:bottom-0 after:left-0 after:bg-contain`}
+              } flex justify-center items-center cursor-pointer before:bg-[url('/label.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-1 before:top-0 before:left-0 before:bg-contain after:bg-[url('/label.webp')] after:absolute after:bg-repeat-x after:block after:w-full after:h-1 after:bottom-0 after:left-0 after:bg-contain`}
             >
               {item.title}
             </li>

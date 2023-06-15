@@ -2,13 +2,13 @@ import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const images = [
-  '/image7.png',
-  '/image1.png',
-  '/image4.png',
-  '/image6.png',
-  '/image2.png',
-  '/image3.png',
-  '/image5.png'
+  '/image7.webp',
+  '/image1.webp',
+  '/image4.webp',
+  '/image6.webp',
+  '/image2.webp',
+  '/image3.webp',
+  '/image5.webp'
 ];
 
 export default function Carousel(): ReactElement {

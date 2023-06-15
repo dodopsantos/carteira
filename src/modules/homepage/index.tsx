@@ -8,11 +8,11 @@ import Effects from './components/effects';
 export default function Homepage(): JSX.Element {
   return (
     <>
-      <section className="min-h-screen bg-[url('/backgroundNews.jpg')] md:bg-none bg-gray-900 flex items-center justify-center text-gray-100">
+      <section className="min-h-screen bg-[url('/backgroundNews.webp')] md:bg-none bg-gray-900 flex items-center justify-center text-gray-100">
         <BackgroundVideo />
         <MenuInfo />
       </section>
-      <section className="min-h-screen relative text-center min-h-screen bg-[url('/backgroundNews.jpg')]  flex justify-center text-gray-100 z-1 before:bg-[url('/module.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-7 before:z-1 before:top-0 before:left-0 before:bg-contain after:bg-[url('/module.webp')]">
+      <section className="min-h-screen relative text-center min-h-screen bg-[url('/backgroundNews.webp')]  flex justify-center text-gray-100 z-1 before:bg-[url('/module.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-7 before:z-1 before:top-0 before:left-0 before:bg-contain after:bg-[url('/module.webp')]">
         <div className="pt-24 pb-36 md:px-6">
           <h2 className="text-center uppercase text-2xl">
             Explore um mundo de aventuras
@@ -33,8 +33,8 @@ export default function Homepage(): JSX.Element {
             experiencia no universo de Bleach, construi sua história e
             principalmente, divirta-se!
           </p>
-          <div className="flex gap-2 items-center">
-            <div className="relative w-8 h-8">
+          <div className="flex gap-1 items-center">
+            <div className="relative w-8 h-8 max-w-[10vw]">
               <Image
                 src="/arrow-left.svg"
                 color="teal"
@@ -44,7 +44,7 @@ export default function Homepage(): JSX.Element {
             </div>
 
             <Carousel />
-            <div className="relative w-8 h-8">
+            <div className="relative w-8 h-8 max-w-[10vw]">
               <Image
                 src="/arrow-right.svg"
                 color="teal"
@@ -55,7 +55,7 @@ export default function Homepage(): JSX.Element {
           </div>
         </div>
       </section>
-      <section className="relative text-center min-h-screen bg-[#242424] bg-[url('/mechanics.jpg')] bg-bottom bg-no-repeat  flex justify-center text-gray-100 before:bg-[url('/module.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-7 before:z-1 before:top-0 before:left-0 before:bg-contain">
+      <section className="relative text-center min-h-screen bg-[#242424] bg-[url('/mechanics.webp')] bg-bottom bg-no-repeat  flex justify-center text-gray-100 before:bg-[url('/module.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-7 before:z-1 before:top-0 before:left-0 before:bg-contain">
         <div className="pt-24 pb-36 px-6">
           <h2 className="text-center uppercase text-2xl">
             Mecânicas e efeitos únicos

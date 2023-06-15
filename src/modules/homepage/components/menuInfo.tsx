@@ -3,9 +3,9 @@ import React, { ReactElement } from 'react';
 
 export default function MenuInfo(): ReactElement {
   return (
-    <div className="flex mt-12 md:mt-0 justify-center align-center flex-col max-w-3xl z-10 p-6 rounded">
+    <div className="flex mt-[10vh] md:mt-0 justify-center align-center flex-col max-w-3xl z-10 p-6 rounded">
       <picture className="flex justify-center">
-        <img src="/SOF2.png" className="header__logo" alt="Ravendawn Logo" />
+        <img src="/SOF2.webp" className="header__logo" alt="Ravendawn Logo" />
       </picture>
       <div className="bg-gray-900/70 mb-16 rounded">
         <h1 className="text-2xl mb-5 text-center">
@@ -61,7 +61,7 @@ export default function MenuInfo(): ReactElement {
         <ul className="flex flex-row align-center justify-between">
           <li className="relative min-w-28 gap-0.5 cursor-pointer text-center">
             <Image
-              src="/bleachLogo.png"
+              src="/bleachLogo.webp"
               width="60px"
               height="60px"
               quality={100}
@@ -69,15 +69,30 @@ export default function MenuInfo(): ReactElement {
             <p className="text-sm font-normal md:uppercase">Beta interno</p>
           </li>
           <li className="relative min-w-28 gap-0.5 cursor-pointer text-center">
-            <Image src="/bleachLogo.png" width={60} height={60} quality={100} />
+            <Image
+              src="/bleachLogo.webp"
+              width={60}
+              height={60}
+              quality={100}
+            />
             <p className="text-sm font-normal md:uppercase">Beta fechado</p>
           </li>
           <li className="relative min-w-28 gap-0.5 cursor-pointer text-center">
-            <Image src="/incomplete.png" width={60} height={60} quality={100} />
+            <Image
+              src="/incomplete.webp"
+              width={60}
+              height={60}
+              quality={100}
+            />
             <p className="text-sm font-normal md:uppercase">Beta aberto</p>
           </li>
           <li className="relative min-w-28 gap-0.5 cursor-pointer text-center">
-            <Image src="/incomplete.png" width={60} height={60} quality={100} />
+            <Image
+              src="/incomplete.webp"
+              width={60}
+              height={60}
+              quality={100}
+            />
             <p className="text-sm font-normal md:uppercase">Lançamento</p>
           </li>
         </ul>

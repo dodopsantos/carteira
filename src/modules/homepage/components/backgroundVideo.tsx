@@ -11,7 +11,7 @@ export default function BackgroundVideo(): ReactElement {
           muted
           playsInline
           loop
-          preload="/preload.png"
+          preload="/preload.webp"
         >
           <source src="/background.webm" type="video/webm" />
         </video>
