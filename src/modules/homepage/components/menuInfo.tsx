@@ -4,13 +4,15 @@ import React, { ReactElement } from 'react';
 export default function MenuInfo(): ReactElement {
   return (
     <div className="flex mt-[10vh] md:mt-0 justify-center align-center flex-col max-w-3xl z-10 p-6 rounded">
-      <picture className="flex justify-center">
-        <img
+      <div className="flex justify-center w-full">
+        <Image
           src="/SOF2.webp"
           className="header__logo"
           alt="Sword of Fate Logo"
+          width={3500}
+          height={696}
         />
-      </picture>
+      </div>
       <div className="bg-gray-900/70 mb-16 rounded">
         <h1 className="text-2xl mb-5 text-center">
           Explore um Mundo Totalmente Novo!
@@ -23,7 +25,7 @@ export default function MenuInfo(): ReactElement {
       <div className="flex flex-col gap-2 md:gap-0 md:flex-row justify-around mb-14">
         <a
           className="flex gap-x-5 rounded border-2 border-solid text-white hover:text-yellow border-white hover:border-yellow bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 w-full md:w-2/5 text-center justify-center"
-          href=""
+          href="#"
         >
           <Image
             src="/AccountIcon.svg"
@@ -35,7 +37,7 @@ export default function MenuInfo(): ReactElement {
         </a>
         <a
           className="flex gap-x-5 rounded border-2 border-solid text-white hover:text-yellow border-white hover:border-yellow bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 w-full md:w-2/5 text-center justify-center"
-          href=""
+          href="#"
         >
           <Image
             src="/download.svg"
