@@ -17,9 +17,8 @@ export default function Home(): JSX.Element {
   );
 }
 
-export const getStaticProps: GetServerSideProps = async ctx => {
+export const getServerSideProps: GetServerSideProps = async ctx => {
   // const { ['nextauth-token']: token } = parseCookies(ctx);
-  // const api = getAPIClient(ctx);
 
   // if (!token) {
   //   return {
@@ -29,8 +28,6 @@ export const getStaticProps: GetServerSideProps = async ctx => {
   //     }
   //   };
   // }
-
-  // const { data: rank } = await api.get('/v1/players/rank');
 
   return {
     props: {}

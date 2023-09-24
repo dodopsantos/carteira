@@ -1,6 +1,8 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import effects from '@utils/data/effects.json';
 import dynamic from 'next/dynamic';
+import { Heading } from '@components/Heading';
+import { Text } from '@components/Text';
 const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
 
 export default function Effects(): ReactElement {
@@ -12,34 +14,37 @@ export default function Effects(): ReactElement {
   }, [activated]);
 
   return (
-    <div className="block md:flex justify-center gap-12 w-full md:w-[80vw] h-4/5">
-      <div className="md:w-1/5 flex justify-center">
-        <ul className="w-full h-full rounded md:gap-2 md:flex md:flex-col grid grid-rows-3 grid-flow-col gap-2">
+    <div className="block h-4/5 w-full justify-center gap-12 md:flex md:w-[80vw]">
+      <div className="flex justify-center md:w-1/5">
+        <ul className="grid h-full w-full grid-flow-col grid-rows-3 gap-2 rounded md:flex md:flex-col md:gap-2">
           {effects.map((item, idx) => (
             <li
               key={idx}
               onClick={() => setActivated(idx)}
-              className={`md:relative rounded text-xs md:text-sm ${
+              className={`rounded text-xs md:relative md:text-sm ${
                 activated === idx
-                  ? 'hover:bg-teal-600 p-2 bg-teal-700'
-                  : 'hover:bg-gray-600 p-2 bg-gray-700 '
-              } flex justify-center items-center cursor-pointer before:bg-[url('/label.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-1 before:top-0 before:left-0 before:bg-contain after:bg-[url('/label.webp')] after:absolute after:bg-repeat-x after:block after:w-full after:h-1 after:bottom-0 after:left-0 after:bg-contain`}
+                  ? 'bg-teal-700 p-2 hover:bg-teal-600'
+                  : 'bg-gray-700 p-2 hover:bg-gray-600 '
+              } flex cursor-pointer items-center justify-center before:absolute before:top-0 before:left-0 before:block before:h-1 before:w-full before:bg-[url('/label.webp')] before:bg-contain before:bg-repeat-x after:absolute after:bottom-0 after:left-0 after:block after:h-1 after:w-full after:bg-[url('/label.webp')] after:bg-contain after:bg-repeat-x`}
             >
-              {item.title}
+              <Text size="lg">{item.title}</Text>
             </li>
           ))}
         </ul>
       </div>
-      <div className="w-full md:w-4/5 xl:w-3/5 mt-4 md:mt-0">
-        <div className="bg-gray-900/50 w-full rounded border-double border-4 border-teal-700 p-6">
-          <h1 className="text-center uppercase text-xl max-h-1/5">
+      <div className="mt-4 w-full md:mt-0 md:w-4/5 xl:w-3/5">
+        <div className="w-full rounded border-4 border-double border-teal-700 bg-gray-900/50 p-6">
+          <Heading size="md" className="max-h-1/5 text-center uppercase">
             {effects[activated].title}
-          </h1>
-          <p className="text-base text-justify mx-auto my-4 max-h-1/5">
-            {effects[activated].description}
-          </p>
+          </Heading>
+          <Text size="lg" asChild>
+            <p className="max-h-1/5 mx-auto my-4 text-justify">
+              {effects[activated].description}
+            </p>
+          </Text>
           <ReactPlayer
-            className="hidden md:block max-h-3/5 mx-auto my-0"
+            light="/thumbnail.png"
+            className="max-h-3/5 mx-auto my-0 hidden md:block"
             url={source}
             width="100%"
             height="100%"

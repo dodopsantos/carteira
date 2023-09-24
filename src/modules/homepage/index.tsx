@@ -1,22 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BackgroundVideo from './components/backgroundVideo';
 import MenuInfo from './components/menuInfo';
 import Carousel from './components/carousel';
 import Image from 'next/image';
 import Effects from './components/effects';
+import PlayableClasses from './components/playableClasses';
+import { ArrowIndicator } from '@components/ArrowIndicator/arrowIndicator';
+import { Heading } from '@components/Heading';
+import { Text } from '@components/Text';
 
 export default function Homepage(): JSX.Element {
+  const [background, setBackground] = useState<Number>(0);
   return (
     <>
-      <section className="min-h-screen bg-[url('/backgroundNews.webp')] md:bg-none bg-gray-900 flex items-center justify-center text-gray-100">
+      <section className="flex min-h-screen items-center justify-center bg-gray-900 bg-[url('/backgroundNews.webp')] text-gray-100 md:bg-none">
         <BackgroundVideo />
         <MenuInfo />
+        <ArrowIndicator />
       </section>
-      <section className="min-h-screen relative text-center min-h-screen bg-[url('/backgroundNews.webp')]  flex justify-center text-gray-100 z-1 before:bg-[url('/module.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-7 before:z-1 before:top-0 before:left-0 before:bg-contain after:bg-[url('/module.webp')]">
+      <section className="z-1 before:z-1 relative flex justify-center bg-[url('/backgroundNews.webp')] text-center text-gray-100 before:absolute before:top-0 before:left-0 before:block before:h-7 before:w-full before:bg-[url('/module.webp')] before:bg-contain before:bg-repeat-x after:bg-[url('/module.webp')]">
         <div className="pt-24 pb-36 md:px-6">
-          <h2 className="text-center uppercase text-2xl">
+          <Heading size="lg" className="uppercase">
             Explore um mundo de aventuras
-          </h2>
+          </Heading>
           <Image
             alt="Logo"
             src="/divider.svg"
@@ -24,17 +30,19 @@ export default function Homepage(): JSX.Element {
             height={100}
             quality={100}
           />
-          <p className="px-6 md:px-0 text-base max-w-3xl text-center mx-auto my-0">
-            Em Sword of Fate, o mundo é seu para conquistar! A imensidão dos
-            mapas permite que você explore praticamente em qualquer lugar -
-            Entre o mundo dos humanos, shinigamis e hollows. Tudo o que você
-            precisa fazer é adquirir poder e reunir amigos para estabelecer seu
-            dominio e construir sua própria guild. Sword of Fate é a sua nova
-            experiencia no universo de Bleach, construi sua história e
-            principalmente, divirta-se!
-          </p>
-          <div className="flex gap-1 items-center">
-            <div className="relative w-8 h-8 max-w-[10vw]">
+          <Text size="lg" asChild>
+            <p className="mx-auto my-0 max-w-3xl px-6 text-center text-justify md:px-0">
+              Em Sword of Fate, o mundo é seu para conquistar! A imensidão dos
+              mapas permite que você explore praticamente em qualquer lugar -
+              Entre o mundo dos humanos, shinigamis e hollows. Tudo o que você
+              precisa fazer é adquirir poder e reunir amigos para estabelecer
+              seu dominio e construir sua própria guild. Sword of Fate é a sua
+              nova experiencia no universo de Bleach, construi sua história e
+              principalmente, divirta-se!
+            </p>
+          </Text>
+          <div className="flex items-center gap-1">
+            <div className="relative h-8 w-8 max-w-[10vw]">
               <Image
                 src="/arrow-left.svg"
                 color="teal"
@@ -45,7 +53,7 @@ export default function Homepage(): JSX.Element {
             </div>
 
             <Carousel />
-            <div className="relative w-8 h-8 max-w-[10vw]">
+            <div className="relative h-8 w-8 max-w-[10vw]">
               <Image
                 src="/arrow-right.svg"
                 color="teal"
@@ -56,12 +64,44 @@ export default function Homepage(): JSX.Element {
             </div>
           </div>
         </div>
+        <ArrowIndicator />
       </section>
-      <section className="relative text-center min-h-screen bg-[#242424] bg-[url('/mechanics.webp')] bg-bottom bg-no-repeat  flex justify-center text-gray-100 before:bg-[url('/module.webp')] before:absolute before:bg-repeat-x before:block before:w-full before:h-7 before:z-1 before:top-0 before:left-0 before:bg-contain">
-        <div className="pt-24 pb-36 px-6">
-          <h2 className="text-center uppercase text-2xl">
+      <section
+        className={`before:z-1 relative flex justify-center bg-[#242424] ${
+          background === 0
+            ? 'bg-[url(/ryujin.webp)]'
+            : background === 1
+            ? 'bg-[url(/ulquiorra.webp)]'
+            : background === 2
+            ? 'bg-[url(/quincy.webp)]'
+            : background === 3
+            ? 'bg-[url(/ryoka.webp)]'
+            : ''
+        }   bg-bottom bg-no-repeat text-center text-gray-100 duration-300 ease-in before:absolute before:top-0 before:left-0 before:block before:h-7 before:w-full before:bg-[url('/module.webp')] before:bg-contain before:bg-repeat-x`}
+      >
+        <div className="px-6 pt-24 pb-36">
+          <Heading
+            size="lg"
+            className={`mx-auto w-fit rounded bg-gray-800/95 px-2 uppercase`}
+          >
+            Classes jogáveis
+          </Heading>
+          <Image
+            alt="Logo"
+            src="/divider.svg"
+            width={100}
+            height={100}
+            quality={100}
+          />
+          <PlayableClasses callback={(e: Number) => setBackground(e)} />
+          <ArrowIndicator />
+        </div>
+      </section>
+      <section className="before:z-1 relative flex justify-center bg-[#242424] bg-[url('/mechanics.webp')]  bg-bottom bg-no-repeat text-center text-gray-100 before:absolute before:top-0 before:left-0 before:block before:h-7 before:w-full before:bg-[url('/module.webp')] before:bg-contain before:bg-repeat-x">
+        <div className="px-6 pt-24 pb-36">
+          <Heading size="lg" className="uppercase">
             Mecânicas e efeitos únicos
-          </h2>
+          </Heading>
           <Image
             alt="Logo"
             src="/divider.svg"

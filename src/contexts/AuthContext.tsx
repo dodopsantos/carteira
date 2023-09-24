@@ -35,19 +35,19 @@ export function AuthProvider({ children }: any) {
   }, []);
 
   async function signIn({ password, username }: signInData) {
-    // const response = await api.post('/oauth/token', {
-    //   grant_type: 'password',
-    //   username,
-    //   password: sha256(password)
-    // });
+    const response = await api.post('/oauth/token', {
+      grant_type: 'password',
+      username,
+      password: sha256(password)
+    });
 
-    // setCookie(undefined, 'nextauth-token', response?.data?.access_token, {
-    //   expires: response?.data?.expires_in
-    // });
+    setCookie(undefined, 'nextauth-token', response?.data?.access_token, {
+      expires: response?.data?.expires_in
+    });
 
-    // api.defaults.headers[
-    //   'Authorization'
-    // ] = `Bearer ${response?.data?.access_token}`;
+    api.defaults.headers[
+      'Authorization'
+    ] = `Bearer ${response?.data?.access_token}`;
 
     setUser({ username });
     Router.push('/');

@@ -1,10 +1,12 @@
+import { Heading } from '@components/Heading';
+import { Text } from '@components/Text';
 import Image from 'next/image';
 import React, { ReactElement } from 'react';
 
 export default function MenuInfo(): ReactElement {
   return (
-    <div className="flex mt-[10vh] md:mt-0 justify-center align-center flex-col max-w-3xl z-10 p-6 rounded">
-      <div className="flex justify-center w-full">
+    <div className="align-center z-10 mt-[10vh] flex max-w-3xl flex-col justify-center rounded p-6 md:mt-0">
+      <div className="flex w-full justify-center">
         <Image
           src="/SOF2.webp"
           className="header__logo"
@@ -13,69 +15,75 @@ export default function MenuInfo(): ReactElement {
           height={696}
         />
       </div>
-      <div className="bg-gray-900/70 mb-16 rounded">
-        <h1 className="text-2xl mb-5 text-center">
+      <div className="mb-16 rounded bg-gray-900/70">
+        <Heading size="lg" className="mb-5 text-center">
           Explore um Mundo Totalmente Novo!
-        </h1>
-        <p className=" text-center text-xl">
-          Uma experiência épica de MMORPG, focada em jogabilidade, comunidade e
-          no design único do Bleach!
-        </p>
+        </Heading>
+        <Text size="xl" asChild>
+          <p className=" text-center">
+            Uma experiência épica de MMORPG, focada em jogabilidade, comunidade
+            e no design único do Bleach!
+          </p>
+        </Text>
       </div>
-      <div className="flex flex-col gap-2 md:gap-0 md:flex-row justify-around mb-14">
-        <a
-          className="flex gap-x-5 rounded border-2 border-solid text-white hover:text-yellow border-white hover:border-yellow bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 w-full md:w-2/5 text-center justify-center"
-          href="#"
-        >
-          <Image
-            src="/AccountIcon.svg"
-            width="25.89"
-            height="25.89"
-            alt="Create"
-          />
-          CRIE UMA CONTA
-        </a>
-        <a
-          className="flex gap-x-5 rounded border-2 border-solid text-white hover:text-yellow border-white hover:border-yellow bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 w-full md:w-2/5 text-center justify-center"
-          href="#"
-        >
-          <Image
-            src="/download.svg"
-            width="25.89"
-            height="25.89"
-            alt="download"
-          />
-          BAIXAR JOGO
-        </a>
+      <div className="mb-14 flex flex-col justify-around gap-2 md:flex-row md:gap-0">
+        <Text size="lg" asChild>
+          <a
+            className="flex w-full justify-center gap-x-5 rounded border-2 border-solid border-white bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 text-center text-white hover:border-yellow hover:text-yellow md:w-2/5"
+            href="#"
+          >
+            <Image
+              src="/AccountIcon.svg"
+              width="25.89"
+              height="25.89"
+              alt="Create"
+            />
+            CRIE UMA CONTA
+          </a>
+        </Text>
+        <Text size="lg" asChild>
+          <a
+            className="flex w-full justify-center gap-x-5 rounded border-2 border-solid border-white bg-gradient-to-l from-gray-800 to-gray-900 py-6 px-9 text-center text-white hover:border-yellow hover:text-yellow md:w-2/5"
+            href="#"
+          >
+            <Image
+              src="/download.svg"
+              width="25.89"
+              height="25.89"
+              alt="download"
+            />
+            BAIXAR JOGO
+          </a>
+        </Text>
       </div>
       <div className="relative block w-full max-w-3xl">
         <div
-          className="absolute top-[calc(50%_-_9px)] right-1/2 w-[calc(100%_-_84px)] h-1 translate-x-1/2 translate-y-1/2 
-            before:bg-[url('/label.webp')] 
+          className="absolute top-[calc(50%_-_9px)] right-1/2 h-1 w-[calc(100%_-_84px)] translate-x-1/2 translate-y-1/2 
             before:absolute 
-            before:bg-repeat-x 
-            before:block 
-            before:w-full 
-            before:h-1 
             before:top-1 
             before:left-0 
-            before:bg-contain
+            before:block 
+            before:h-1 
+            before:w-full 
+            before:bg-[url('/label.webp')] 
+            before:bg-contain 
+            before:bg-repeat-x
 
-            after:bg-[url('/label.webp')] 
             after:absolute 
-            after:bg-repeat-x 
-            after:block 
-            after:w-full 
-            after:h-1 
             after:bottom-1 
             after:left-0 
-            after:bg-contain"
+            after:block 
+            after:h-1 
+            after:w-full 
+            after:bg-[url('/label.webp')] 
+            after:bg-contain 
+            after:bg-repeat-x"
         >
-          <span className="rounded block w-full h-1 absolute z-1 bg-black"></span>
-          <span className="rounded block w-full h-1 absolute z-2 bg-[#b1d435] border-y border-[#8aaa1b] w-1/3"></span>
+          <span className="z-1 absolute block h-1 w-full rounded bg-black"></span>
+          <span className="z-2 absolute block h-1 w-full w-1/3 rounded border-y border-[#8aaa1b] bg-[#b1d435]"></span>
         </div>
-        <ul className="flex flex-row align-center justify-between">
-          <li className="relative min-w-28 gap-0.5 cursor-pointer text-center">
+        <ul className="align-center flex flex-row justify-between">
+          <li className="min-w-28 relative cursor-pointer gap-0.5 text-center">
             <Image
               src="/bleachLogo.webp"
               width="60px"
@@ -83,9 +91,11 @@ export default function MenuInfo(): ReactElement {
               quality={100}
               alt="logo"
             />
-            <p className="text-sm font-normal md:uppercase">Beta interno</p>
+            <Text asChild>
+              <p className="md:uppercase">Beta interno</p>
+            </Text>
           </li>
-          <li className="relative min-w-28 gap-0.5 cursor-pointer text-center">
+          <li className="min-w-28 relative cursor-pointer gap-0.5 text-center">
             <Image
               src="/bleachLogo.webp"
               width={60}
@@ -93,9 +103,11 @@ export default function MenuInfo(): ReactElement {
               quality={100}
               alt="logo"
             />
-            <p className="text-sm font-normal md:uppercase">Beta fechado</p>
+            <Text size="lg" asChild>
+              <p className="text-hollow md:uppercase">Beta fechado</p>
+            </Text>
           </li>
-          <li className="relative min-w-28 gap-0.5 cursor-pointer text-center">
+          <li className="min-w-28 relative cursor-pointer gap-0.5 text-center">
             <Image
               src="/incomplete.webp"
               width={60}
@@ -103,9 +115,11 @@ export default function MenuInfo(): ReactElement {
               quality={100}
               alt="logo"
             />
-            <p className="text-sm font-normal md:uppercase">Beta aberto</p>
+            <Text asChild>
+              <p className="md:uppercase">Beta aberto</p>
+            </Text>
           </li>
-          <li className="relative min-w-28 gap-0.5 cursor-pointer text-center">
+          <li className="min-w-28 relative cursor-pointer gap-0.5 text-center">
             <Image
               src="/incomplete.webp"
               width={60}
@@ -113,7 +127,9 @@ export default function MenuInfo(): ReactElement {
               quality={100}
               alt="logo"
             />
-            <p className="text-sm font-normal md:uppercase">Lançamento</p>
+            <Text asChild>
+              <p className="md:uppercase">Lançamento</p>
+            </Text>
           </li>
         </ul>
       </div>

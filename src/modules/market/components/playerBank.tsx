@@ -15,12 +15,12 @@ type Props = {
 
 export default function PlayerBank({ bank }: Props): ReactElement {
   return (
-    <div className="grid grid-cols-10 gap-1 bg-gray-400 rounded p-2">
+    <div className="grid grid-cols-10 gap-1 rounded bg-gray-400 p-2">
       {bank?.map((item: Bank, idx) => {
         return (
           <div
             key={idx}
-            className="w-8 h-8 bg-[#273142] border-solid rounded border-2 border-[#353D4E]"
+            className="h-8 w-8 rounded border-2 border-solid border-[#353D4E] bg-[#273142]"
           >
             {item.Quantity != 0 && (
               <Tooltip ItemId={item.ItemId}>

@@ -22,6 +22,11 @@ module.exports = {
       yellow: '#ffc82c',
       header: '#131416e6',
 
+      shinigami: '#FF5E00',
+      hollow: '#A6FE31',
+      quincy: '#0052A2',
+      ryoka: '#FFFB00',
+
       gray: {
         900: '#121214',
         800: '#202024',
@@ -46,6 +51,22 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: 'Inter, sans-serif'
+      },
+      keyframes: {
+        arrow: {
+          '0%': {
+              opacity: '0'
+          },
+          '40%': {
+              opacity: '1'
+          },
+          '80%': {
+              opacity: '0'
+          },
+          '100%': {
+              opacity: '0'
+          }
+      }
       }
     }
   },

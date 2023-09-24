@@ -1,4 +1,5 @@
 [
   { "title": "início", "to": "/" },
+  { "title": "Wiki", "to": "/wiki" },
   { "title": "Discord", "to": "https://discord.gg/wXKQk8QtwK" }
 ]

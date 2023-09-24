@@ -25,23 +25,23 @@ export function Login({ signIn }: any) {
     defaultValues: { remember: false }
   });
 
-  const onSubmit: SubmitHandler<Inputs> = data => console.log(data); //signIn(data);
+  const onSubmit: SubmitHandler<Inputs> = data => signIn(data); //signIn(data);
 
   return (
-    <div className="w-screen h-screen bg-gray-900 flex flex-col items-center justify-center text-gray-100">
+    <div className="flex h-screen w-screen flex-col items-center justify-center bg-gray-900 text-gray-100">
       <header className="flex flex-col items-center">
         <Logo />
         <Heading size="lg" className="mt-4">
           Carteira
         </Heading>
-        <Text size="lg" className="text-gray-400 mt-1">
+        <Text size="lg" className="mt-1 text-gray-400">
           Faça login e comece a usar!
         </Text>
       </header>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 items-stretch w-full max-w-sm mt-10"
+        className="mt-10 flex w-full max-w-sm flex-col items-stretch gap-4"
       >
         <label htmlFor="username" className="flex flex-col gap-3">
           <div className="flex justify-between">
@@ -129,7 +129,7 @@ export function Login({ signIn }: any) {
         </Button>
       </form>
 
-      <footer className="flex flex-col items-center gap-4 mt-8">
+      <footer className="mt-8 flex flex-col items-center gap-4">
         <Text asChild size="sm">
           <a href="#" className="text-gray-400 underline hover:text-gray-200">
             Esqueceu sua senha?

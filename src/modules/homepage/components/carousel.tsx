@@ -20,7 +20,7 @@ export default function Carousel(): ReactElement {
   }, []);
 
   return (
-    <div className="w-full my-0 my-auto flex items-center justify-center max-w-[80vw] md:max-w-[60vw]">
+    <div className="my-0 my-auto flex w-full max-w-[80vw] items-center justify-center md:max-w-[60vw]">
       <motion.div
         ref={carousel}
         className="cursor-grab overflow-hidden"
@@ -37,7 +37,7 @@ export default function Carousel(): ReactElement {
           {images.map((image, index) => (
             <motion.div className="min-h-[400px] min-w-[527px] p-4" key={index}>
               <img
-                className="w-full h-11/12 rounded pointer-events-none"
+                className="h-11/12 pointer-events-none w-full rounded border-2 border-gray-800"
                 src={image}
                 alt="Game images"
                 loading="lazy"

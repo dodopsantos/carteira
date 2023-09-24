@@ -5,8 +5,8 @@ import Image from 'next/image';
 
 export default function Navbar(): ReactElement {
   return (
-    <nav className="fixed p-2.5 w-full z-20">
-      <div className="flex h-[70px] rounded-md justify-between items-center px-5 md:px-20px bg-header">
+    <nav className="fixed z-20 w-full p-2.5">
+      <div className="md:px-20px flex h-[70px] items-center justify-between rounded-md bg-header px-5">
         <Link href="/">
           <a href="/" className="flex items-center">
             {/* <h1 className="font-bold text-white text-2xl cursor-pointer">

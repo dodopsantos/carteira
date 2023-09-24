@@ -22,7 +22,7 @@ export function Tooltip({ children, ItemId }: TooltipProps) {
       {children}
       <div
         ref={tooltipRef}
-        className="invisible group-hover:visible opacity-0 group-hover:opacity-100 transition bg-gray-400 text-white p-1 rounded absolute top-full mt-2"
+        className="invisible absolute top-full mt-2 rounded bg-gray-400 p-1 text-white opacity-0 transition group-hover:visible group-hover:opacity-100"
       >
         {ItemId}
       </div>

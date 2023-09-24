@@ -8,7 +8,7 @@ export interface TextInputRootProps {
 
 function TextInputRoot(props: TextInputRootProps) {
   return (
-    <div className="flex items-center gap-3 h-12 py-4 px-3 rounded bg-gray-800 w-full focus-within:ring-2 ring-teal-300">
+    <div className="flex h-12 w-full items-center gap-3 rounded bg-gray-800 py-4 px-3 ring-teal-300 focus-within:ring-2">
       {props.children}
     </div>
   );
@@ -21,7 +21,7 @@ export interface TextInputIconProps {
 }
 
 function TextInputIcon(props: TextInputIconProps) {
-  return <Slot className="w-6 h-6 text-gray-400">{props.children}</Slot>;
+  return <Slot className="h-6 w-6 text-gray-400">{props.children}</Slot>;
 }
 
 TextInputIcon.displayName = 'TextInput.Icon';
@@ -32,7 +32,7 @@ export interface TextInputInputProps
 function TextInputInput(props: TextInputInputProps) {
   return (
     <input
-      className="bg-transparent flex-1 outline-none text-gray-100 text-xs placeholder:text-gray-400"
+      className="flex-1 bg-transparent text-xs text-gray-100 outline-none placeholder:text-gray-400"
       {...props}
     />
   );

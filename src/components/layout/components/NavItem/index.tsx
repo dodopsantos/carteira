@@ -19,11 +19,11 @@ export default function NavItem({ title, to }: INavItemProps): ReactElement {
         isCurrentRoute(to)
           ? 'bg-teal-600 md:bg-teal-700'
           : 'md:hover:bg-teal-500 '
-      } rounded flex md:mb-0 mb-1 last:mb-0 transition ease-in-out delay-40 hover:scale-105`}
+      } delay-40 mb-1 flex rounded transition ease-in-out last:mb-0 hover:scale-105 md:mb-0`}
     >
       <Link href={to}>
         <a
-          className="font-bold text-white w-full h-full rounded p-2"
+          className="h-full w-full rounded p-2 font-bold text-white"
           aria-current="page"
         >
           {title}

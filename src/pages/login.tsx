@@ -22,6 +22,15 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   const { ['nextauth-token']: token } = parseCookies(ctx);
   const api = getAPIClient(ctx);
 
+  if (token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    };
+  }
+
   // const res = await api.post('/oauth/token', {
   //   grant_type: 'password',
   //   username: 'admin',
@@ -31,15 +40,6 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   // setCookie(ctx, 'nextauth-token', res?.data?.access_token, {
   //   maxAge: res?.data?.expires_in
   // });
-
-  if (token) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false
-      }
-    };
-  }
 
   return {
     props: {}

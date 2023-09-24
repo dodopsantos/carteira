@@ -4,9 +4,9 @@ import React, { ReactElement } from 'react';
 export default function BackgroundVideo(): ReactElement {
   return (
     <>
-      <div className="opacity-70 absolute min-w-full min-h-full w-full overflow-hidden justify-center hidden md:flex z-0">
+      <div className="absolute z-0 hidden min-h-full w-full min-w-full justify-center overflow-hidden opacity-70 md:flex">
         <video
-          className="w-full flex"
+          className="flex w-full"
           autoPlay
           muted
           playsInline
