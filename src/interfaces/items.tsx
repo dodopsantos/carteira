@@ -20,3 +20,7 @@ interface Values {
   VitalsGiven: Array<number>;
   VitalsRegen: Array<number>;
 }
+export interface Filter {
+  category: Number;
+  rarity: Number;
+}
