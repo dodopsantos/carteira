@@ -1,11 +1,8 @@
 import { Text } from '@components/Text';
-import { Tooltip } from '@components/Tooltip';
 import { Entities, Filter, Items } from '@interfaces/items';
 import { ActivityWiki } from '@pages/wiki';
-import IconFromItemId from '@utils/data/iconFromName';
 import Image from 'next/image';
 import React, { ReactElement, useEffect, useState } from 'react';
-
 interface Props {
   items: Items;
   filter: Filter;
@@ -17,6 +14,7 @@ export default function GridItems({
 }: Props): ReactElement {
   const [items, setItems] = useState<Entities[]>(getItems.entries);
   const [pagination, setPagination] = useState<number>(1);
+  const [activityType, setActivityWiki] = useState<Number>(filter.category);
   const [totalPages, setTotalPages] = useState<Array<any>>(
     Array.from(Array(getItems.entries.length / 10).keys())
   );
@@ -26,15 +24,24 @@ export default function GridItems({
       if (filter.rarity !== 0) {
         return (
           x.Value.Rarity === filter.rarity &&
-          x.Value.ItemType === filter.category
+          x.Value.ItemType === filter.category &&
+          x.Value.Name.toLocaleLowerCase().includes(
+            filter.search.toLocaleLowerCase()
+          )
         );
       }
-      return x.Value.ItemType === filter.category;
+      return (
+        x.Value.ItemType === filter.category &&
+        x.Value.Name.toLocaleLowerCase().includes(
+          filter.search.toLocaleLowerCase()
+        )
+      );
     });
 
     setTotalPages(Array.from(Array(Math.ceil(filtered.length / 10)).keys()));
 
     let formatted = filtered.slice((pagination - 1) * 10, pagination * 10);
+    if (formatted.length === 0) setPagination(1);
     setItems(formatted);
   };
 
@@ -91,6 +98,56 @@ export default function GridItems({
     );
   };
 
+  const handleVitals = (attributes: Array<number>) => {
+    if (!attributes) return <></>;
+    return (
+      <>
+        <Text size="sm">HP {attributes[0]}, </Text>
+        <Text size="sm">MP {attributes[1]} </Text>
+      </>
+    );
+  };
+
+  const handleVitalsRegen = (attributes: Array<number>) => {
+    if (!attributes) return <></>;
+    return (
+      <>
+        <Text size="sm">HP {attributes[0]} %, </Text>
+        <Text size="sm">MP {attributes[1]} % </Text>
+      </>
+    );
+  };
+
+  const handleItemType = (attributes: Entities) => {
+    switch (attributes.Value.ItemType) {
+      case 1:
+        return (
+          <>
+            <td className="px-6 py-4">
+              {handleVitals(attributes.Value.VitalsGiven)}
+            </td>
+            <td className="px-6 py-4">
+              {handleVitalsRegen(attributes.Value.VitalsRegen)}
+            </td>
+            <td className="px-6 py-4">
+              {attributes.Value.ItemType === 1 ? (
+                handleAttributes(attributes.Value.StatsGiven)
+              ) : (
+                <Text>-</Text>
+              )}
+            </td>
+          </>
+        );
+
+      default:
+        return (
+          <td className="px-6 py-4">
+            <Text size="sm">{attributes.Value.Description}</Text>
+          </td>
+        );
+    }
+  };
+
   useEffect(() => {
     handlePagination();
   }, [pagination, filter]);
@@ -108,9 +165,23 @@ export default function GridItems({
             <th scope="col" className="px-6 py-3">
               <Text>Raridade</Text>
             </th>
-            <th scope="col" className="px-6 py-3">
-              <Text>Atributos</Text>
-            </th>
+            {filter.category === 1 ? (
+              <>
+                <th scope="col" className="px-6 py-3">
+                  <Text>Sobrevivência</Text>
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  <Text>Regeneração</Text>
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  <Text>Atributos</Text>
+                </th>
+              </>
+            ) : (
+              <th scope="col" className="px-6 py-3">
+                <Text>Descrição</Text>
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -134,13 +205,7 @@ export default function GridItems({
                   <Text>{item.Value.Name}</Text>
                 </th>
                 <td className="px-6 py-4">{handleRarity(item.Value.Rarity)}</td>
-                <td className="px-6 py-4">
-                  {item.Value.ItemType === 1 ? (
-                    handleAttributes(item.Value.StatsGiven)
-                  ) : (
-                    <Text>-</Text>
-                  )}
-                </td>
+                {handleItemType(item)}
               </tr>
             );
           })}

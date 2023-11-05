@@ -11,7 +11,7 @@ export interface Entities {
 }
 
 interface Values {
-  CanBag: boolean;
+  Id: string;
   Icon: string;
   Rarity: number;
   Name: string;
@@ -19,8 +19,10 @@ interface Values {
   StatsGiven: Array<number>;
   VitalsGiven: Array<number>;
   VitalsRegen: Array<number>;
+  Description: string;
 }
 export interface Filter {
   category: Number;
   rarity: Number;
+  search: string;
 }
