@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import { AuthProvider } from '@contexts/AuthContext';
 import { Analytics } from '@vercel/analytics/react';
 
+import '@styles/modalRadix.css';
 import '@styles/globals.css';
 
 export default function MyApp({ Component, pageProps }: AppProps) {

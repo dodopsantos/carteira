@@ -1,6 +1,5 @@
 import { Items, Filter } from '@interfaces/items';
 import { ActivityWiki } from '@pages/wiki';
-import IconFromItemId from '@utils/data/iconFromName';
 import React, { ReactElement } from 'react';
 import GridItems from './_gridItems';
 import { FilterNpc, Npcs } from '@interfaces/npcs';
@@ -30,12 +29,8 @@ export default function Body({
   return (
     <div className="flex w-full justify-center bg-header">
       <div className="m-4 grid h-fit w-full rounded bg-gray-800">
-        {activityWiki.index === 0 && (
-          <GridItems filter={filter} items={items} />
-        )}
-        {activityWiki.index === 1 && (
-          <GridNPCs filter={filterNpc} npcs={npcs} />
-        )}
+        {activityWiki.index === 0 && <GridItems filter={filter} items={items} />}
+        {activityWiki.index === 1 && <GridNPCs filter={filterNpc} npcs={npcs} />}
         {activityWiki.index === 2 && (
           <GridCrafts filter={filterCraft} crafts={crafts} />
         )}

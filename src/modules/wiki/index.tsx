@@ -10,9 +10,9 @@ import { Crafts, FilterCrafts } from '@interfaces/crafts';
 interface Props {
   activityWiki: ActivityWiki;
   callback(e: ActivityWiki): void;
-  items: Items;
-  npcs: Npcs;
-  crafts: Crafts;
+  items: Items;   // agora é array
+  npcs: Npcs;     // agora é array
+  crafts: Crafts; // por enquanto []
 }
 
 export default function WikiPage({
@@ -23,21 +23,21 @@ export default function WikiPage({
   crafts
 }: Props): JSX.Element {
   const [open, setOpen] = useState<boolean>(false);
+
   const [filter, setFilter] = useState<Filter>({
     category: 1,
     rarity: 0,
     search: ''
   });
-  const [filterNpc, setFilterNpc] = useState<FilterNpc>({
-    search: ''
-  });
-  const [filterCraft, setFilterCraft] = useState<FilterCrafts>({
-    search: ''
-  });
+
+  const [filterNpc, setFilterNpc] = useState<FilterNpc>({ search: '' });
+
+  const [filterCraft, setFilterCraft] = useState<FilterCrafts>({ search: '' });
 
   return (
     <div className="min-h-screen bg-gray-800">
       <Header activityWiki={activityWiki} toggle={() => setOpen(!open)} />
+
       <div className="flex">
         <Sidebar
           open={open}
@@ -50,6 +50,7 @@ export default function WikiPage({
           searchCraft={(e: FilterCrafts) => setFilterCraft(e)}
           filterCraft={filterCraft}
         />
+
         <Body
           filter={filter}
           items={items}

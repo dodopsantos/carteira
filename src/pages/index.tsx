@@ -9,7 +9,7 @@ export default function Home(): JSX.Element {
   return (
     <div>
       <main>
-        <Layout>
+        <Layout footer>
           <Homepage />
         </Layout>
       </main>
@@ -18,7 +18,7 @@ export default function Home(): JSX.Element {
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-  // const { ['nextauth-token']: token } = parseCookies(ctx);
+  const { ['nextauth-token']: token } = parseCookies(ctx);
 
   // if (!token) {
   //   return {
