@@ -30,6 +30,16 @@
     "additional.d.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".storybook",
+    "storybook-static",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    "**/*.stories.js",
+    "**/*.stories.jsx",
+    "**/*.story.ts",
+    "**/*.story.tsx",
+    "**/*.story.js",
+    "**/*.story.jsx"
   ]
 }
