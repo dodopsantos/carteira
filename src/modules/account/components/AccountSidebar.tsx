@@ -56,51 +56,45 @@ function SidebarSection({ label, children }: SidebarSectionProps) {
 
 function SidebarItem({ label, icon, href, active, onNavigate }: SidebarItemProps) {
   return (
-    <Link href={href} passHref>
-      <a
-        onClick={onNavigate}
-        className={`
+    <Link href={href} passHref className={`
           flex items-center gap-3
           rounded-xl px-3 py-2
           border transition-colors
-          ${
-            active
-              ? `
+          ${active
+        ? `
                 border-teal-500/40
                 bg-teal-500/15
                 text-slate-100
               `
-              : `
+        : `
                 border-transparent
                 text-slate-200
                 hover:bg-white/5
                 hover:border-white/10
               `
-          }
-        `}
-      >
-        <span
-          className={`
-            flex h-8 w-8 items-center justify-center rounded-md
-            ${
-              active
-                ? 'bg-teal-500/20 text-teal-300'
-                : 'bg-slate-900/80 text-teal-300'
-            }
-          `}
-        >
-          {icon}
-        </span>
+      }
+        `}>
 
-        <span
-          className={`
+      <span
+        className={`
+            flex h-8 w-8 items-center justify-center rounded-md
+            ${active
+            ? 'bg-teal-500/20 text-teal-300'
+            : 'bg-slate-900/80 text-teal-300'
+          }
+          `}
+      >
+        {icon}
+      </span>
+
+      <span
+        className={`
             text-[0.95rem] font-medium
             ${active ? 'text-slate-100' : 'text-slate-200'}
           `}
-        >
-          {label}
-        </span>
-      </a>
+      >
+        {label}
+      </span>
     </Link>
   );
 }
@@ -190,14 +184,9 @@ function SidebarContent({
 
       {/* Rodapé */}
       <div className="mt-4 border-t border-white/10 pt-4">
-        <Link href="/" passHref>
-          <a
-            onClick={onNavigate}
-            className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-200 hover:bg-white/5"
-          >
-            <House size={16} />
-            Voltar ao site
-          </a>
+        <Link href="/" passHref className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-200 hover:bg-white/5">
+          <House size={16} />
+          Voltar ao site
         </Link>
 
         {/* BOTÃO SAIR – sempre vermelho claro */}

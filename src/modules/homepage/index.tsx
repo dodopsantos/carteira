@@ -26,9 +26,9 @@ export default function Homepage(): JSX.Element {
         <div className="relative z-10 w-full px-4">
           <MenuInfo />
         </div>
-        <div className="relative z-20">
+        {/* <div className="relative z-20">
           <ArrowIndicator />
-        </div>
+        </div> */}
       </section>
 
       {/* SECTION 4 – Patch Notes */}
