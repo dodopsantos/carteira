@@ -1,15 +1,9 @@
 export interface Crafts {
   Page: number;
   count: number;
-  entries: Array<Entities>;
+  Values: Array<Values>;
   total: number;
 }
-
-export interface Entities {
-  Key: string;
-  Value: Values;
-}
-
 interface Values {
   Icon: string;
   Name: string;

@@ -1,4 +1,10 @@
 [
-  { "title": "início", "to": "/" },
+  { "title": "Início", "to": "/" },
+  {
+    "title": "Patch Notes",
+    "to": "/#patch-notes"
+  },
+  { "title": "Wiki", "to": "/wiki" },
+  { "title": "Minha Conta", "to": "/account" },
   { "title": "Discord", "to": "https://discord.gg/wXKQk8QtwK" }
 ]

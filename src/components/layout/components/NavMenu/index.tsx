@@ -5,52 +5,117 @@ import useOnClickOutside from '@hooks/onClickOutsideHook';
 
 export default function NavMenu(): ReactElement {
   const [open, setOpen] = useState(false);
-  const menuRef = useRef();
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
   useOnClickOutside(menuRef, () => setOpen(false));
 
   return (
-    <div ref={menuRef}>
-      <button
-        data-collapse-toggle="navbar-default"
-        onClick={() => setOpen(!open)}
-        type="button"
-        className="bg-teal-200 ml-3 items-center rounded p-2 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 lg:hidden"
-        aria-controls="navbar-default"
-        aria-expanded="false"
-      >
-        <span className="sr-only">Open main menu</span>
-        <svg
-          className="h-6 w-6 fill-teal-900"
-          aria-hidden="true"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fillRule="evenodd"
-            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-            clipRule="evenodd"
-          ></path>
-        </svg>{' '}
-      </button>
-      {/*desktop*/}
-      <div className="hidden w-full lg:block lg:w-auto" id="navbar-default">
-        <ul className="flex flex-col lg:mt-0 lg:flex-row lg:space-x-8 lg:border-0 lg:text-sm lg:font-medium">
-          {menuItems.map((item, key) => (
-            <NavItem key={key} title={item.title} to={item.to} />
-          ))}
+    <div ref={menuRef} className="relative flex items-center">
+      {/* Desktop */}
+      <div className="hidden lg:block">
+        <ul className="flex items-center gap-6 text-sm font-medium text-slate-200">
+          {menuItems.map((item, key) => {
+            const isDiscord = item.title?.toLowerCase().includes('discord');
+
+            if (isDiscord) {
+              // Estilo de CTA para Discord
+              return (
+                <li key={key}>
+                  <NavItem
+                    title={item.title}
+                    to={item.to}
+                    className="rounded-full border border-teal-500/70 bg-teal-500/10 px-4 py-1.5 text-xs uppercase tracking-wide text-teal-300 hover:bg-teal-500/20 hover:text-teal-200 transition"
+                  />
+                </li>
+              );
+            }
+
+            return (
+              <li key={key}>
+                <NavItem
+                  title={item.title}
+                  to={item.to}
+                  className="text-sm text-slate-100 hover:text-teal-300 transition-colors"
+                />
+              </li>
+            );
+          })}
         </ul>
       </div>
-      {/*mobile*/}
+
+      {/* Botão mobile */}
+      <button
+        type="button"
+        onClick={() => setOpen(prev => !prev)}
+        className="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-900/80 p-2 text-slate-200 hover:border-teal-400 hover:text-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 lg:hidden"
+        aria-controls="sof-navbar"
+        aria-expanded={open}
+      >
+        <span className="sr-only">Abrir menu principal</span>
+        <svg
+          className="h-6 w-6"
+          aria-hidden="true"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          {open ? (
+            // ícone X
+            <path
+              fillRule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 
+              1.414L11.414 10l4.293 4.293a1 1 0 
+              01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 
+              01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 
+              010-1.414z"
+              clipRule="evenodd"
+            />
+          ) : (
+            // ícone hamburguer
+            <path
+              fillRule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 
+              110 2H4a1 1 0 01-1-1zm0 5a1 1 0 
+              011-1h12a1 1 0 110 2H4a1 1 0 
+              01-1-1zm0 5a1 1 0 011-1h12a1 1 0 
+              110 2H4a1 1 0 01-1-1z"
+              clipRule="evenodd"
+            />
+          )}
+        </svg>
+      </button>
+
+      {/* Mobile dropdown */}
       {open && (
         <div
-          className="absolute top-16 left-5 right-5 z-50 rounded bg-teal-700 lg:block lg:w-auto"
-          id="navbar-default"
+          id="sof-navbar"
+          className="absolute right-0 top-12 w-56 rounded-2xl border border-slate-800 bg-slate-900/95 p-2 shadow-xl lg:hidden"
         >
-          <ul className="flex flex-col p-4 lg:mt-0 lg:flex-row lg:space-x-8 lg:border-0 lg:text-sm lg:font-medium">
-            {menuItems.map((item, key) => (
-              <NavItem key={key} title={item.title} to={item.to} />
-            ))}
+          <ul className="flex flex-col gap-1 text-sm font-medium text-slate-200">
+            {menuItems.map((item, key) => {
+              const isDiscord = item.title?.toLowerCase().includes('discord');
+
+              if (isDiscord) {
+                return (
+                  <li key={key} onClick={() => setOpen(false)}>
+                    <NavItem
+                      title={item.title}
+                      to={item.to}
+                      className="block rounded-xl border border-teal-500/70 bg-teal-500/10 px-3 py-2 text-xs uppercase tracking-wide text-teal-300 hover:bg-teal-500/20 hover:text-teal-200 transition"
+                    />
+                  </li>
+                );
+              }
+
+              return (
+                <li key={key} onClick={() => setOpen(false)}>
+                  <NavItem
+                    title={item.title}
+                    to={item.to}
+                    className="block rounded-lg px-3 py-2 text-slate-200 hover:bg-slate-800 hover:text-teal-300 transition"
+                  />
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

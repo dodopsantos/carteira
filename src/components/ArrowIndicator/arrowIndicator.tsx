@@ -1,20 +1,43 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
 export function ArrowIndicator() {
   return (
-    <svg className="absolute left-2/4 bottom-5 ml-[-30px] h-[72px] w-[60px]">
-      <path
-        className="animation-delay:-1s; animate-[arrow_2s_infinite] fill-transparent stroke-[#2994D1] stroke-[1px]"
-        d="M0 0 L30 32 L60 0"
-      ></path>
-      <path
-        className="animation-delay:-0.5s animate-[arrow_2s_infinite] fill-transparent stroke-[#2994D1] stroke-[1px]"
-        d="M0 20 L30 52 L60 20"
-      ></path>
-      <path
-        className="animation-delay:0s animate-[arrow_2s_infinite] fill-transparent stroke-[#2994D1] stroke-[1px]"
-        d="M0 40 L30 72 L60 40"
-      ></path>
-    </svg>
+    <div
+      className="
+        absolute left-1/2 -translate-x-1/2
+        flex flex-col items-center justify-center gap-1
+        opacity-80
+      "
+    >
+      <svg
+        width="36"
+        height="22"
+        viewBox="0 0 36 22"
+        className="animate-arrow stroke-teal-300/80 stroke-[2px] fill-none"
+        style={{ animationDelay: "-1s" }}
+      >
+        <path d="M2 2 L18 20 L34 2" />
+      </svg>
+
+      <svg
+        width="36"
+        height="22"
+        viewBox="0 0 36 22"
+        className="animate-arrow stroke-teal-300/70 stroke-[2px] fill-none"
+        style={{ animationDelay: "-0.5s" }}
+      >
+        <path d="M2 2 L18 20 L34 2" />
+      </svg>
+
+      <svg
+        width="36"
+        height="22"
+        viewBox="0 0 36 22"
+        className="animate-arrow stroke-teal-300/60 stroke-[2px] fill-none"
+        style={{ animationDelay: "0s" }}
+      >
+        <path d="M2 2 L18 20 L34 2" />
+      </svg>
+    </div>
   );
 }

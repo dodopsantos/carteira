@@ -6,7 +6,10 @@ export async function recoverUserInformation() {
 
   return {
     user: {
-      username: 'Douglas Prado dos Santos'
+      username: 'dodops',
+      email: 'tridops@gmail.com',
+      createdAt: '12/02/2024',
+      vip: true
     }
   };
 }

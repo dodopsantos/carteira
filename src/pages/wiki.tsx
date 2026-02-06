@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import WikiPage from '@modules/wiki';
 import Layout from '@components/layout';
 import { GetStaticProps } from 'next';
-import { getAPIPublic } from '@services/axios';
-import { Items } from '@interfaces/items';
-import { Npcs } from '@interfaces/npcs';
-import { Crafts } from '@interfaces/crafts';
+import { getAPIClient } from '@services/axios';
+
+import type { Items } from '@interfaces/items';
+import type { Npcs } from '@interfaces/npcs';
+import type { Crafts } from '@interfaces/crafts';
 
 export interface ActivityWiki {
   index: number;
@@ -17,75 +18,104 @@ interface Props {
   crafts: Crafts;
 }
 
-export default function Wiki({ items, npcs, crafts }: Props): JSX.Element {
-  const [activityWiki, setActivityWiki] = useState<ActivityWiki>({
-    index: 0
-  });
+type DropDto = {
+  Chance: number;
+  ItemId: string; // GUID
+  MinQuantity: number;
+  MaxQuantity: number;
 
-  // npcs.entries.map(item => {
-  //   item.Value.Drops.map(x => {
-  //     let name = items.entries.find(y => y.Key === x.ItemId);
-  //     if (name) {
-  //       x.ItemId = name.Value.Name;
-  //       x.Icon = name.Value.Icon;
-  //       return;
-  //     }
-  //     return;
-  //   });
-  // });
+  Icon?: string;
+  ItemName?: string;
+};
 
-  // crafts.entries.map(item => {
-  //   let flag = items.entries.find(y => y.Key === item.Value.ItemId);
-  //   if (flag) item.Value.Icon = flag.Value.Icon;
-
-  //   item.Value.Ingredients.map(x => {
-  //     let name = items.entries.find(y => y.Key === x.ItemId);
-  //     if (name) {
-  //       x.ItemId = name.Value.Name;
-  //       x.Icon = name.Value.Icon;
-  //       return;
-  //     }
-  //     return;
-  //   });
-  // });
-
+function isDropDto(x: unknown): x is DropDto {
+  if (!x || typeof x !== 'object') return false;
+  const d = x as any;
   return (
-    <div>
-      <main>
-        <Layout>
-          {/* <WikiPage
-            activityWiki={activityWiki}
-            callback={(e: ActivityWiki) => setActivityWiki(e)}
-            items={items}
-            npcs={npcs}
-            crafts={crafts}
-          /> */}
-        </Layout>
-      </main>
-    </div>
+    typeof d.ItemId === 'string' &&
+    typeof d.Chance === 'number' &&
+    typeof d.MinQuantity === 'number' &&
+    typeof d.MaxQuantity === 'number'
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  // const api = getAPIPublic();
+function toArray<T>(data: any): T[] {
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.Values)) return data.Values;
+  if (Array.isArray(data?.data)) return data.data;
+  if (Array.isArray(data?.data?.Values)) return data.data.Values;
+  return [];
+}
 
-  // const { data: items } = await api.post('/v1/gameobjects/item', {
-  //   page: 0,
-  //   count: 100
-  // });
+export default function Wiki({ items, npcs, crafts }: Props): JSX.Element {
+  const [activityWiki, setActivityWiki] = useState<ActivityWiki>({ index: 0 });
 
-  // const { data: npcs } = await api.post('/v1/gameobjects/npc', {
-  //   page: 0,
-  //   count: 100
-  // });
+  const itemsList = useMemo<any[]>(() => toArray<any>(items), [items]);
+  const npcsList = useMemo<any[]>(() => toArray<any>(npcs), [npcs]);
 
-  // const { data: crafts } = await api.post('/v1/gameobjects/crafts', {
-  //   page: 0,
-  //   count: 100
-  // });
+  const itemsById = useMemo(() => {
+    const map = new Map<string, any>();
+    itemsList.forEach((it) => {
+      if (typeof it?.Id === 'string') map.set(it.Id, it);
+      else if (typeof it?.ItemId === 'string') map.set(it.ItemId, it);
+    });
+    return map;
+  }, [itemsList]);
 
+  // ✅ não muta `npcsList` direto: cria uma cópia enriquecida
+  const enrichedNpcs = useMemo(() => {
+    return npcsList.map((npc: any) => {
+      const drops = Array.isArray(npc?.Drops) ? npc.Drops : [];
+
+      const enrichedDrops = drops.map((d: unknown) => {
+        if (!isDropDto(d)) return d;
+
+        const found = itemsById.get(d.ItemId);
+        if (!found) return d;
+
+        return {
+          ...d,
+          Icon: found.Icon,
+          ItemName: found.Name
+        };
+      });
+
+      return {
+        ...npc,
+        Drops: enrichedDrops
+      };
+    });
+  }, [npcsList, itemsById]);
+
+  return (
+    <Layout>
+      <WikiPage
+        activityWiki={activityWiki}
+        callback={(e: ActivityWiki) => setActivityWiki(e)}
+        items={itemsList as unknown as Items}
+        npcs={enrichedNpcs as unknown as Npcs}
+        crafts={crafts}
+      />
+    </Layout>
+  );
+}
+
+export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
+  const api = getAPIClient(ctx);
+
+  const [itemsRes, npcsRes] = await Promise.all([
+    api.get('/gameobjects/items/all'),
+    api.get('/gameobjects/npcs/all')
+  ]);
+
+  const crafts = [] as unknown as Crafts;
+  console.log(npcsRes)
   return {
-    props: {},
+    props: {
+      items: toArray(itemsRes.data.items) as unknown as Items,
+      npcs: toArray(npcsRes.data.npcs) as unknown as Npcs,
+      crafts
+    },
     revalidate: 3600
   };
 };
