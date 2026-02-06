@@ -119,7 +119,7 @@ export default function Homepage(): JSX.Element {
       </section>
 
       {/* SECTION 3 – CLASSES JOGÁVEIS */}
-      <section
+      {/* <section
         className={`relative flex justify-center items-center text-gray-100 overflow-hidden
           bg-cover bg-center bg-no-repeat py-32
           transition-all duration-700 ease-in-out
@@ -135,13 +135,10 @@ export default function Homepage(): JSX.Element {
           }
         `}
       >
-        {/* overlay de leitura */}
         <div className="absolute inset-0 bg-black/65 backdrop-blur-[1px]" />
 
-        {/* textura superior */}
         <div className="absolute top-0 left-0 w-full h-7 bg-[url('/module.webp')] bg-repeat-x bg-contain opacity-60" />
 
-        {/* conteúdo */}
         <div className="relative z-10 w-full max-w-5xl px-6">
 
           <Heading
@@ -167,8 +164,7 @@ export default function Homepage(): JSX.Element {
             <ArrowIndicator />
           </div>
         </div>
-      </section>
-
+      </section> */}
 
       {/* SECTION 4 – Mecânicas e efeitos */}
       <section

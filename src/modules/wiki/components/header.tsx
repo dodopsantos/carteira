@@ -5,38 +5,48 @@ import { ActivityWiki } from '@pages/wiki';
 
 interface Props {
   activityWiki: ActivityWiki;
-  toggle: Function;
+  toggle: () => void;
 }
 
 export default function Header({ activityWiki, toggle }: Props): ReactElement {
+  const title = data?.[activityWiki.index]?.key ?? 'Wiki';
+
   return (
-    <div className="flex h-36 w-full items-end gap-4 border-b-4 border-double border-teal-700 bg-gray-800 lg:justify-center">
-      <button
-        data-collapse-toggle="navbar-default"
-        onClick={() => toggle()}
-        type="button"
-        className="bg-teal-200 ml-3 items-center rounded p-2 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 lg:hidden"
-        aria-controls="navbar-default"
-        aria-expanded="false"
-      >
-        <span className="sr-only">Open main menu</span>
-        <svg
-          className="h-6 w-6 fill-white"
-          aria-hidden="true"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
+    <div className="sticky top-0 z-20 w-full border-b border-white/10 bg-black/60 backdrop-blur">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4">
+        {/* Mobile toggle */}
+        <button
+          onClick={toggle}
+          type="button"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/80 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 lg:hidden"
+          aria-label="Open filters"
         >
-          <path
-            fillRule="evenodd"
-            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-            clipRule="evenodd"
-          ></path>
-        </svg>{' '}
-      </button>
-      <Heading size="lg" className="uppercase">
-        {data[activityWiki.index].key}
-      </Heading>
+          <svg
+            className="h-5 w-5"
+            aria-hidden="true"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+
+        <div className="flex flex-1 items-center justify-between">
+          <Heading size="lg" className="uppercase tracking-wide text-white">
+            {title}
+          </Heading>
+
+          <div className="hidden lg:block">
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+              Sword of Fate Wiki
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

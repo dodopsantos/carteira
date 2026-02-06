@@ -50,11 +50,9 @@ function toArray<T>(data: any): T[] {
 export default function Wiki({ items, npcs, crafts }: Props): JSX.Element {
   const [activityWiki, setActivityWiki] = useState<ActivityWiki>({ index: 0 });
 
-  // ✅ garante array (evita: forEach is not a function)
   const itemsList = useMemo<any[]>(() => toArray<any>(items), [items]);
   const npcsList = useMemo<any[]>(() => toArray<any>(npcs), [npcs]);
 
-  // ✅ index por GUID (Id ou ItemId — depende do seu JSON real)
   const itemsById = useMemo(() => {
     const map = new Map<string, any>();
     itemsList.forEach((it) => {
@@ -64,32 +62,41 @@ export default function Wiki({ items, npcs, crafts }: Props): JSX.Element {
     return map;
   }, [itemsList]);
 
-  npcsList.forEach((npc: any) => {
-    if (!Array.isArray(npc?.Drops)) return;
+  // ✅ não muta `npcsList` direto: cria uma cópia enriquecida
+  const enrichedNpcs = useMemo(() => {
+    return npcsList.map((npc: any) => {
+      const drops = Array.isArray(npc?.Drops) ? npc.Drops : [];
 
-    npc.Drops.forEach((d: unknown) => {
-      if (!isDropDto(d)) return;
+      const enrichedDrops = drops.map((d: unknown) => {
+        if (!isDropDto(d)) return d;
 
-      const found = itemsById.get(d.ItemId);
-      if (found) {
-        d.Icon = found.Icon;
-        d.ItemName = found.Name;
-      }
+        const found = itemsById.get(d.ItemId);
+        if (!found) return d;
+
+        return {
+          ...d,
+          Icon: found.Icon,
+          ItemName: found.Name
+        };
+      });
+
+      return {
+        ...npc,
+        Drops: enrichedDrops
+      };
     });
-  });
+  }, [npcsList, itemsById]);
 
   return (
-    <main>
-      <Layout>
-        <WikiPage
-          activityWiki={activityWiki}
-          callback={(e: ActivityWiki) => setActivityWiki(e)}
-          items={items}
-          npcs={npcs}
-          crafts={crafts}
-        />
-      </Layout>
-    </main>
+    <Layout>
+      <WikiPage
+        activityWiki={activityWiki}
+        callback={(e: ActivityWiki) => setActivityWiki(e)}
+        items={itemsList as unknown as Items}
+        npcs={enrichedNpcs as unknown as Npcs}
+        crafts={crafts}
+      />
+    </Layout>
   );
 }
 
@@ -98,17 +105,17 @@ export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
 
   const [itemsRes, npcsRes] = await Promise.all([
     api.get('/gameobjects/items/all'),
-    api.get('/gameobjects/npcs/all'),
+    api.get('/gameobjects/npcs/all')
   ]);
 
   const crafts = [] as unknown as Crafts;
-
+  console.log(npcsRes)
   return {
     props: {
-      items: toArray(itemsRes.data) as unknown as Items,
-      npcs: toArray(npcsRes.data) as unknown as Npcs,
-      crafts,
+      items: toArray(itemsRes.data.items) as unknown as Items,
+      npcs: toArray(npcsRes.data.npcs) as unknown as Npcs,
+      crafts
     },
-    revalidate: 3600,
+    revalidate: 3600
   };
 };
