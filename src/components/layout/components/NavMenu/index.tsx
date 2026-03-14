@@ -16,6 +16,7 @@ export default function NavMenu(): ReactElement {
         <ul className="flex items-center gap-6 text-sm font-medium text-slate-200">
           {menuItems.map((item, key) => {
             const isDiscord = item.title?.toLowerCase().includes('discord');
+            const isDisabled = item.disabled;
 
             if (isDiscord) {
               // Estilo de CTA para Discord
@@ -24,6 +25,7 @@ export default function NavMenu(): ReactElement {
                   <NavItem
                     title={item.title}
                     to={item.to}
+                    disabled={isDisabled}
                     className="rounded-full border border-teal-500/70 bg-teal-500/10 px-4 py-1.5 text-xs uppercase tracking-wide text-teal-300 hover:bg-teal-500/20 hover:text-teal-200 transition"
                   />
                 </li>
@@ -35,6 +37,7 @@ export default function NavMenu(): ReactElement {
                 <NavItem
                   title={item.title}
                   to={item.to}
+                  disabled={isDisabled}
                   className="text-sm text-slate-100 hover:text-teal-300 transition-colors"
                 />
               </li>

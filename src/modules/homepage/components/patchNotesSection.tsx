@@ -52,7 +52,7 @@ const patchNotes: PatchNote[] = [
   {
     version: '0.3.5',
     title: 'Afinamento de Combate',
-    date: '05 Fev 2026',
+    date: '05 Jan 2026',
     tag: 'Balanceamento',
     category: 'balance',
     highlights: [

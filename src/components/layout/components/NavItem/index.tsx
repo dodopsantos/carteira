@@ -7,12 +7,21 @@ interface INavItemProps {
   title: string;
   to: string;
   className?: string; // permite personalizar o estilo
+  disabled?: boolean;
 }
 
-export default function NavItem({ title, to, className }: INavItemProps): ReactElement {
+export default function NavItem({ title, to, className, disabled }: INavItemProps): ReactElement {
   const router = useRouter();
 
   const isActive = router.asPath === to;
+
+  if (disabled) {
+    return (
+      <span className={`${className} opacity-50 cursor-not-allowed`}>
+        {title}
+      </span>
+    );
+  }
 
   return (
     <Link href={to} className={clsx(

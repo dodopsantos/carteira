@@ -65,8 +65,8 @@ export default function WikiPage({
                 items={items}
                 filterNpc={filterNpc}
                 npcs={npcs}
-                filterCraft={filterCraft}
-                crafts={crafts}
+                // filterCraft={filterCraft}
+                // crafts={crafts}
                 activityWiki={activityWiki}
               />
             </div>
