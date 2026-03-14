@@ -101,6 +101,14 @@ export default function Wiki({ items, npcs, crafts }: Props): JSX.Element {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
+  return {
+    props: {
+      items: [] as unknown as Items,
+      npcs: [] as unknown as Npcs,
+      crafts: [] as unknown as Crafts
+    },
+    revalidate: 3600
+  };
   const api = getAPIClient(ctx);
 
   const [itemsRes, npcsRes] = await Promise.all([
