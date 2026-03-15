@@ -409,21 +409,16 @@ export default function MarketPage() {
 
   return (
     <MarketLayout onCreate={() => setCreateOpen(true)} total={filtered.length}>
-      {/* ✅ sem scroll da página: o MarketLayout já vira “shell” e aqui é flex */}
       <div className="h-full min-h-0 flex flex-col">
-        {/* Tabs ficam fixas */}
-        <div className="mb-6 rounded-2xl border border-white/10 bg-black/80 shadow-lg shadow-black/50 backdrop-blur overflow-hidden">
+        {/* Tabs + wallet */}
+        <div className="mb-5 rounded-2xl border border-white/10 bg-black/80 shadow-lg shadow-black/50 backdrop-blur overflow-hidden">
           <div className="p-2 flex flex-col sm:flex-row gap-2">
             <button
               type="button"
               onClick={() => router.push('/account')}
-              className="
-                rounded-xl px-3 py-2 text-sm font-semibold border border-white/10
-                bg-white/5 text-white/80 hover:bg-white/10
-                inline-flex items-center justify-center gap-2
-              "
+              className="rounded-xl px-3 py-2 text-sm font-semibold border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:text-slate-100 inline-flex items-center justify-center gap-2 transition-colors"
             >
-              <ArrowLeft size={16} />
+              <ArrowLeft size={15} />
               <span className="hidden sm:inline">Perfil</span>
             </button>
 
@@ -431,16 +426,10 @@ export default function MarketPage() {
               <button
                 type="button"
                 onClick={() => setTab('market')}
-                className={`
-                  flex-1 rounded-xl px-4 py-2 text-sm font-semibold border transition
-                  ${tab === 'market'
-                    ? 'border-teal-400/30 bg-teal-500/15 text-teal-200'
-                    : 'border-white/10 bg-white/5 text-white/70 hover:bg-white/10'
-                  }
-                `}
+                className={`flex-1 rounded-xl px-4 py-2 text-sm font-semibold border transition-colors ${tab === 'market' ? 'border-teal-500/40 bg-teal-500/15 text-teal-200' : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-slate-200'}`}
               >
                 Leilão{' '}
-                <span className="ml-2 rounded-full border border-white/10 bg-black/40 px-2 py-[1px] text-xs text-white/70">
+                <span className="ml-2 rounded-full border border-white/10 bg-black/40 px-2 py-[1px] text-xs text-slate-500">
                   {marketCount}
                 </span>
               </button>
@@ -448,58 +437,36 @@ export default function MarketPage() {
               <button
                 type="button"
                 onClick={() => setTab('mine')}
-                className={`
-                  flex-1 rounded-xl px-4 py-2 text-sm font-semibold border transition
-                  ${tab === 'mine'
-                    ? 'border-sky-400/30 bg-sky-500/15 text-sky-200'
-                    : 'border-white/10 bg-white/5 text-white/70 hover:bg-white/10'
-                  }
-                `}
+                className={`flex-1 rounded-xl px-4 py-2 text-sm font-semibold border transition-colors ${tab === 'mine' ? 'border-teal-500/40 bg-teal-500/15 text-teal-200' : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-slate-200'}`}
               >
                 Meus anúncios{' '}
-                <span className="ml-2 rounded-full border border-white/10 bg-black/40 px-2 py-[1px] text-xs text-white/70">
+                <span className="ml-2 rounded-full border border-white/10 bg-black/40 px-2 py-[1px] text-xs text-slate-500">
                   {mineCount}
                 </span>
               </button>
             </div>
-            <div className="flex items-center gap-2">
-              <div
-                className={`
-                  rounded-xl border border-amber-400/30 bg-amber-500/15
-                  px-3 py-2 text-sm font-semibold text-amber-200
-                  transition-transform duration-300
-                  ${walletPulse === 'gold' ? 'scale-110 shadow-[0_0_18px_rgba(251,191,36,0.6)]' : ''}
-                `}
-              >
-                Gold: <span className="ml-1 tabular-nums">{wallet.gold}</span>
-              </div>
 
-              <div
-                className={`
-                  rounded-xl border border-teal-400/30 bg-teal-500/15
-                  px-3 py-2 text-sm font-semibold text-teal-200
-                  transition-transform duration-300
-                  ${walletPulse === 'shard' ? 'scale-110 shadow-[0_0_18px_rgba(45,212,191,0.6)]' : ''}
-                `}
-              >
-                Shard: <span className="ml-1 tabular-nums">{wallet.shard}</span>
+            <div className="flex items-center gap-2">
+              <div className={`rounded-xl border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-sm font-semibold text-amber-300 tabular-nums transition-transform duration-300 ${walletPulse === 'gold' ? 'scale-110 shadow-[0_0_16px_rgba(251,191,36,0.5)]' : ''}`}>
+                Gold: <span className="ml-1">{wallet.gold.toLocaleString('pt-BR')}</span>
+              </div>
+              <div className={`rounded-xl border border-teal-500/25 bg-teal-500/10 px-3 py-2 text-sm font-semibold text-teal-300 tabular-nums transition-transform duration-300 ${walletPulse === 'shard' ? 'scale-110 shadow-[0_0_16px_rgba(45,212,191,0.5)]' : ''}`}>
+                Shard: <span className="ml-1">{wallet.shard.toLocaleString('pt-BR')}</span>
               </div>
             </div>
 
             <button
               type="button"
               onClick={() => setHistoryOpen(true)}
-              className="
-                rounded-xl px-4 py-2 text-sm font-semibold border border-white/10
-                bg-white/5 text-white/80 hover:bg-white/10
-                inline-flex items-center justify-center gap-2
-              "
+              className="rounded-xl px-4 py-2 text-sm font-semibold border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:text-slate-100 inline-flex items-center justify-center gap-2 transition-colors"
             >
-              <ClockCounterClockwise size={16} />
+              <ClockCounterClockwise size={15} />
               Histórico
-              <span className="ml-1 rounded-full border border-white/10 bg-black/40 px-2 py-[1px] text-xs text-white/70">
-                {history.length}
-              </span>
+              {history.length > 0 && (
+                <span className="ml-1 rounded-full border border-white/10 bg-black/40 px-2 py-[1px] text-xs text-slate-500">
+                  {history.length}
+                </span>
+              )}
             </button>
           </div>
         </div>

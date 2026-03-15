@@ -4,6 +4,7 @@ import data from '@utils/data/wiki.json';
 import { ActivityWiki } from '@pages/wiki';
 import { Filter } from '@interfaces/items';
 import { TextInput } from '@components/TextInput';
+import { Select } from '@components/Select';
 import { MagnifyingGlass } from 'phosphor-react';
 import { FilterNpc } from '@interfaces/npcs';
 import { FilterCrafts } from '@interfaces/crafts';
@@ -27,13 +28,10 @@ export default function Sidebar({
   activityWiki,
   open,
   callback,
-
   search,
   filter,
-
   searchNpc,
   filterNpc,
-
   searchCraft,
   filterCraft
 }: Props): ReactElement {
@@ -47,8 +45,7 @@ export default function Sidebar({
                 <MagnifyingGlass />
               </TextInput.Icon>
               <TextInput.Input
-                id="items"
-                type="text"
+                                type="text"
                 placeholder="Pesquisar item"
                 value={filter.search}
                 onChange={e => {
@@ -62,7 +59,7 @@ export default function Sidebar({
             </TextInput.Root>
 
             <div className="grid grid-cols-1 gap-3">
-              <select
+              <Select
                 value={String(filter.category)}
                 onChange={e =>
                   search({
@@ -71,18 +68,18 @@ export default function Sidebar({
                     search: filter.search
                   })
                 }
-                className="h-10 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white/80 outline-none transition focus:border-white/20"
-              >
-                <option value={1}>Equipamento</option>
-                <option value={0}>Indefinido</option>
-                <option value={2}>Consumível</option>
-                <option value={3}>Moeda</option>
-                <option value={4}>Magia</option>
-                <option value={5}>Evento</option>
-                <option value={6}>Mochila</option>
-              </select>
+                options={[
+                  { label: 'Equipamento', value: 1 },
+                  { label: 'Indefinido', value: 0 },
+                  { label: 'Consumível', value: 2 },
+                  { label: 'Moeda', value: 3 },
+                  { label: 'Magia', value: 4 },
+                  { label: 'Evento', value: 5 },
+                  { label: 'Mochila', value: 6 },
+                ]}
+              />
 
-              <select
+              <Select
                 value={String(filter.rarity)}
                 onChange={e =>
                   search({
@@ -91,15 +88,15 @@ export default function Sidebar({
                     search: filter.search
                   })
                 }
-                className="h-10 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white/80 outline-none transition focus:border-white/20"
-              >
-                <option value={0}>Todas raridades</option>
-                <option value={1}>Comum</option>
-                <option value={2}>Incomum</option>
-                <option value={3}>Raro</option>
-                <option value={4}>Épico</option>
-                <option value={5}>Lendário</option>
-              </select>
+                options={[
+                  { label: 'Todas raridades', value: 0 },
+                  { label: 'Comum', value: 1 },
+                  { label: 'Incomum', value: 2 },
+                  { label: 'Raro', value: 3 },
+                  { label: 'Épico', value: 4 },
+                  { label: 'Lendário', value: 5 },
+                ]}
+              />
             </div>
           </div>
         );
@@ -112,8 +109,7 @@ export default function Sidebar({
                 <MagnifyingGlass />
               </TextInput.Icon>
               <TextInput.Input
-                id="npcs"
-                type="text"
+                                type="text"
                 placeholder="Pesquisar NPC (nome ou drop)"
                 value={filterNpc.search}
                 onChange={e => searchNpc({ search: e.target.value })}
@@ -130,8 +126,7 @@ export default function Sidebar({
                 <MagnifyingGlass />
               </TextInput.Icon>
               <TextInput.Input
-                id="crafts"
-                type="text"
+                                type="text"
                 placeholder="Pesquisar craft"
                 value={filterCraft.search}
                 onChange={e => searchCraft({ search: e.target.value })}
@@ -145,25 +140,30 @@ export default function Sidebar({
     }
   };
 
+  const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+    <Text className="mb-2 px-1 text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-slate-400">
+      {children}
+    </Text>
+  );
+
   const CategoryButtons = () => (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1.5">
       {data.map((item, key) => {
         const isActive = activityWiki.index === item.index;
-
         return (
           <button
             key={key}
             onClick={() => callback(item)}
             type="button"
-            className={`flex h-10 items-center justify-between rounded-lg border px-3 text-sm transition
+            className={`flex h-10 items-center justify-between rounded-xl border px-3 text-sm font-medium transition-colors
               ${isActive
-                ? 'border-white/20 bg-white/10 text-white'
-                : 'border-white/10 bg-black/20 text-white/80 hover:bg-black/30'
+                ? 'border-teal-500/40 bg-teal-500/15 text-slate-100'
+                : 'border-transparent text-slate-200 hover:bg-white/5 hover:border-white/10'
               }`}
           >
             <span className="truncate">{item.key}</span>
             {isActive && (
-              <span className="ml-3 rounded-full bg-white/10 px-2 py-0.5 text-[10px] text-white/70">
+              <span className="ml-3 rounded-full border border-teal-500/30 bg-teal-500/20 px-2 py-0.5 text-[10px] font-semibold text-teal-300">
                 ativo
               </span>
             )}
@@ -179,19 +179,13 @@ export default function Sidebar({
       <div className="hidden lg:block">
         <div className="flex flex-col gap-4">
           <div>
-            <Text size="lg" className="text-white">
-              Categorias
-            </Text>
-            <div className="mt-3">
-              <CategoryButtons />
-            </div>
+            <SectionLabel>Categorias</SectionLabel>
+            <CategoryButtons />
           </div>
 
           <div className="border-t border-white/10 pt-4">
-            <Text size="lg" className="text-white">
-              Filtros
-            </Text>
-            <div className="mt-3">{handleFilters()}</div>
+            <SectionLabel>Filtros</SectionLabel>
+            <div>{handleFilters()}</div>
           </div>
         </div>
       </div>
@@ -199,37 +193,36 @@ export default function Sidebar({
       {/* Mobile drawer */}
       {open && (
         <div className="lg:hidden">
-          <div className="fixed inset-0 z-30 bg-black/60" />
+          <div className="fixed inset-0 z-30 bg-black/70" />
 
-          <div className="fixed left-0 top-0 z-40 h-full w-[85vw] max-w-sm border-r border-white/10 bg-[#0b0f17] p-4 shadow-2xl">
-            <div className="mb-3 flex items-center justify-between">
-              <Text size="lg" className="text-white">
-                Wiki
-              </Text>
-              <Text size="sm" className="text-white/60">
+          <div className="fixed left-0 top-0 z-40 h-full w-[85vw] max-w-sm border-r border-white/10 bg-black/80 p-4 shadow-2xl backdrop-blur">
+            <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
+              <div>
+                <span className="text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-teal-300">
+                  Sword of Fate
+                </span>
+                <div className="mt-0.5 text-base font-semibold text-slate-50">
+                  Wiki
+                </div>
+              </div>
+              <Text size="sm" className="text-slate-400">
                 filtros
               </Text>
             </div>
 
             <div className="flex flex-col gap-4">
               <div>
-                <Text size="lg" className="text-white">
-                  Categorias
-                </Text>
-                <div className="mt-3">
-                  <CategoryButtons />
-                </div>
+                <SectionLabel>Categorias</SectionLabel>
+                <CategoryButtons />
               </div>
 
               <div className="border-t border-white/10 pt-4">
-                <Text size="lg" className="text-white">
-                  Filtros
-                </Text>
-                <div className="mt-3">{handleFilters()}</div>
+                <SectionLabel>Filtros</SectionLabel>
+                <div>{handleFilters()}</div>
               </div>
 
               <div className="border-t border-white/10 pt-4">
-                <Text size="sm" className="text-white/60">
+                <Text size="sm" className="text-slate-400">
                   Dica: toque em uma categoria e volte para a lista.
                 </Text>
               </div>

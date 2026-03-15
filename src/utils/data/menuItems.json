@@ -4,7 +4,7 @@
     "title": "Patch Notes",
     "to": "/#patch-notes"
   },
-  { "title": "Wiki", "to": "/wiki", "disabled": true },
-  { "title": "Minha Conta", "to": "/account", "disabled": true },
+  { "title": "Wiki", "to": "/wiki", "disabled": false },
+  { "title": "Minha Conta", "to": "/account", "disabled": false },
   { "title": "Discord", "to": "https://discord.gg/wXKQk8QtwK" }
 ]

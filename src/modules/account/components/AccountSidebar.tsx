@@ -39,6 +39,27 @@ type SidebarItemProps = {
   onNavigate?: () => void;
 };
 
+/* ========= USER HEADER ========= */
+
+function SidebarUserHeader({ username, title = 'Painel do jogador' }: { username?: string; title?: string }) {
+  return (
+    <div>
+      <span className="text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-teal-300">
+        Sword of Fate
+      </span>
+      <Heading size="sm" className="mt-1 text-lg font-extrabold uppercase text-slate-50">
+        {title}
+      </Heading>
+      {username && (
+        <Text className="mt-1 text-sm text-slate-300">
+          Conectado como{' '}
+          <span className="font-semibold text-teal-300">{username}</span>
+        </Text>
+      )}
+    </div>
+  );
+}
+
 /* ========= SECTION ========= */
 
 function SidebarSection({ label, children }: SidebarSectionProps) {
@@ -56,50 +77,29 @@ function SidebarSection({ label, children }: SidebarSectionProps) {
 
 function SidebarItem({ label, icon, href, active, onNavigate }: SidebarItemProps) {
   return (
-    <Link href={href} passHref className={`
-          flex items-center gap-3
-          rounded-xl px-3 py-2
-          border transition-colors
-          ${active
-        ? `
-                border-teal-500/40
-                bg-teal-500/15
-                text-slate-100
-              `
-        : `
-                border-transparent
-                text-slate-200
-                hover:bg-white/5
-                hover:border-white/10
-              `
-      }
-        `}>
-
-      <span
-        className={`
-            flex h-8 w-8 items-center justify-center rounded-md
-            ${active
-            ? 'bg-teal-500/20 text-teal-300'
-            : 'bg-slate-900/80 text-teal-300'
-          }
-          `}
-      >
+    <Link
+      href={href}
+      passHref
+      onClick={onNavigate}
+      className={`
+        flex items-center gap-3 rounded-xl px-3 py-2 border transition-colors
+        ${active
+          ? 'border-teal-500/40 bg-teal-500/15 text-slate-100'
+          : 'border-transparent text-slate-200 hover:bg-white/5 hover:border-white/10'
+        }
+      `}
+    >
+      <span className={`flex h-8 w-8 items-center justify-center rounded-md ${active ? 'bg-teal-500/20 text-teal-300' : 'bg-slate-900/80 text-teal-300'}`}>
         {icon}
       </span>
-
-      <span
-        className={`
-            text-[0.95rem] font-medium
-            ${active ? 'text-slate-100' : 'text-slate-200'}
-          `}
-      >
+      <span className={`text-[0.95rem] font-medium ${active ? 'text-slate-100' : 'text-slate-200'}`}>
         {label}
       </span>
     </Link>
   );
 }
 
-/* ========= CONTENT (shared desktop + mobile) ========= */
+/* ========= CONTENT ========= */
 
 function SidebarContent({
   active,
@@ -108,99 +108,39 @@ function SidebarContent({
 }: AccountSidebarProps & { onNavigate?: () => void }) {
   return (
     <>
-      {/* Cabeçalho */}
       <div className="mb-4">
-        <span className="text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-teal-300">
-          Sword of Fate
-        </span>
-
-        <Heading
-          size="sm"
-          className="mt-1 text-lg font-extrabold uppercase text-white"
-        >
-          Painel do jogador
-        </Heading>
-
-        {username && (
-          <Text className="mt-1 text-sm text-slate-300">
-            Conectado como{' '}
-            <span className="font-semibold text-teal-300">{username}</span>
-          </Text>
-        )}
+        <SidebarUserHeader username={username} />
       </div>
 
-      {/* divisor */}
       <div className="mb-4 h-px w-full bg-white/10" />
 
-      {/* Navegação */}
       <nav className="flex-1">
         <div className="space-y-1">
-          <SidebarItem
-            label="Perfil"
-            href="/account"
-            active={active === 'profile'}
-            icon={<UserCircle size={18} />}
-            onNavigate={onNavigate}
-          />
-          <SidebarItem
-            label="Personagens"
-            href="/account/characters"
-            active={active === 'characters'}
-            icon={<UsersThree size={18} />}
-            onNavigate={onNavigate}
-          />
+          <SidebarItem label="Perfil" href="/account" active={active === 'profile'} icon={<UserCircle size={18} />} onNavigate={onNavigate} />
+          <SidebarItem label="Personagens" href="/account/characters" active={active === 'characters'} icon={<UsersThree size={18} />} onNavigate={onNavigate} />
         </div>
 
         <SidebarSection label="Atividade">
-          <SidebarItem
-            label="Transações"
-            href="/account/transactions"
-            active={active === 'transactions'}
-            icon={<ListBullets size={18} />}
-            onNavigate={onNavigate}
-          />
+          <SidebarItem label="Transações" href="/account/transactions" active={active === 'transactions'} icon={<ListBullets size={18} />} onNavigate={onNavigate} />
         </SidebarSection>
 
         <SidebarSection label="Market">
-          <SidebarItem
-            label="Market"
-            href="/market"
-            active={active === 'market'}
-            icon={<ShoppingBag size={18} />}
-            onNavigate={onNavigate}
-          />
+          <SidebarItem label="Market" href="/market" active={active === 'market'} icon={<ShoppingBag size={18} />} onNavigate={onNavigate} />
         </SidebarSection>
 
         <SidebarSection label="Suporte">
-          <SidebarItem
-            label="Ajuda & suporte"
-            href="/account/support"
-            active={active === 'support'}
-            icon={<ChatCircleDots size={18} />}
-            onNavigate={onNavigate}
-          />
+          <SidebarItem label="Ajuda & suporte" href="/account/support" active={active === 'support'} icon={<ChatCircleDots size={18} />} onNavigate={onNavigate} />
         </SidebarSection>
       </nav>
 
-      {/* Rodapé */}
       <div className="mt-4 border-t border-white/10 pt-4">
         <Link href="/" passHref className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-200 hover:bg-white/5">
           <House size={16} />
           Voltar ao site
         </Link>
-
-        {/* BOTÃO SAIR – sempre vermelho claro */}
         <button
           type="button"
-          className="
-            mt-2 flex w-full items-center gap-2
-            rounded-xl px-3 py-2 text-sm font-medium
-            border border-red-500/30
-            bg-red-500/15
-            text-red-300
-            hover:bg-red-500/25
-            transition-colors
-          "
+          className="mt-2 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium border border-red-500/30 bg-red-500/15 text-red-300 hover:bg-red-500/25 transition-colors"
         >
           <SignOut size={16} />
           Sair da conta
@@ -212,123 +152,51 @@ function SidebarContent({
 
 /* ========= SIDEBAR ========= */
 
-export function AccountSidebar({
-  active = 'profile',
-  username
-}: AccountSidebarProps) {
+export function AccountSidebar({ active = 'profile', username }: AccountSidebarProps) {
   const [open, setOpen] = useState(false);
 
-  // Fecha o drawer ao trocar para desktop
   useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth >= 1024) setOpen(false); // lg
-    };
+    const onResize = () => { if (window.innerWidth >= 1024) setOpen(false); };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
   return (
     <>
-      {/* MOBILE TOP BAR (substitui "hidden lg:flex" no mobile) */}
+      {/* MOBILE TOP BAR */}
       <div className="lg:hidden mb-3 flex items-center justify-between">
-        <div>
-          <span className="text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-teal-300">
-            Sword of Fate
-          </span>
-          <div className="mt-1 text-white text-base font-semibold tracking-wide">
-            Painel do jogador
-          </div>
-          {username && (
-            <div className="mt-1 text-xs text-slate-300">
-              Conectado como{' '}
-              <span className="font-semibold text-teal-300">{username}</span>
-            </div>
-          )}
-        </div>
-
+        <SidebarUserHeader username={username} />
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="
-            rounded-xl px-4 py-2
-            border border-white/10
-            bg-white/5
-            text-sm font-medium text-white/80
-            hover:bg-white/10
-            transition-colors
-          "
+          className="rounded-xl px-4 py-2 border border-white/10 bg-white/5 text-sm font-medium text-slate-300 hover:bg-white/10 transition-colors"
         >
           Menu
         </button>
       </div>
 
       {/* DESKTOP SIDEBAR */}
-      <aside
-        className="
-          hidden lg:flex
-          w-64 flex-shrink-0 flex-col
-          rounded-2xl border border-white/10
-          bg-black/80 p-5
-          shadow-lg shadow-black/50
-          backdrop-blur
-        "
-      >
+      <aside className="hidden lg:flex w-64 flex-shrink-0 flex-col rounded-2xl border border-white/10 bg-black/80 p-5 shadow-lg shadow-black/50 backdrop-blur">
         <SidebarContent active={active} username={username} />
       </aside>
 
       {/* MOBILE DRAWER */}
       {open && (
         <div className="lg:hidden fixed inset-0 z-50">
-          {/* overlay */}
-          <button
-            aria-label="Fechar menu"
-            className="absolute inset-0 bg-black/70"
-            onClick={() => setOpen(false)}
-          />
-
-          {/* painel */}
+          <button aria-label="Fechar menu" className="absolute inset-0 bg-black/70" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-0 h-full w-[86%] max-w-sm p-4">
-            <div
-              className="
-                h-full flex flex-col
-                rounded-2xl border border-white/10
-                bg-black/80 p-5
-                shadow-lg shadow-black/50
-                backdrop-blur
-              "
-            >
-              {/* header do drawer */}
+            <div className="h-full flex flex-col rounded-2xl border border-white/10 bg-black/80 p-5 shadow-lg shadow-black/50 backdrop-blur">
               <div className="mb-4 flex items-center justify-between">
-                <div>
-                  <span className="text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-teal-300">
-                    Sword of Fate
-                  </span>
-                  <div className="mt-1 text-white text-base font-semibold tracking-wide">
-                    Menu
-                  </div>
-                </div>
-
+                <SidebarUserHeader username={username} title="Menu" />
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="
-                    rounded-xl px-3 py-2
-                    border border-white/10
-                    bg-white/5
-                    text-white/80
-                    hover:bg-white/10
-                    transition-colors
-                  "
+                  className="rounded-xl px-3 py-2 border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 transition-colors"
                 >
                   <X size={16} />
                 </button>
               </div>
-
-              <SidebarContent
-                active={active}
-                username={username}
-                onNavigate={() => setOpen(false)}
-              />
+              <SidebarContent active={active} username={username} onNavigate={() => setOpen(false)} />
             </div>
           </div>
         </div>

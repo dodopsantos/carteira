@@ -2,7 +2,7 @@ import axios from 'axios';
 import { parseCookies } from 'nookies';
 import https from 'https';
 
-const SERVER_URl = 'http:/localhost:3030/intersect';//'https://4.201.57.73:5443/api';
+const SERVER_URl = 'http://localhost:3030/intersect';//'https://4.201.57.73:5443/api';
 
 export function getAPIClient(ctx?: any) {
   const { 'nextauth-token': token } = parseCookies(ctx);
