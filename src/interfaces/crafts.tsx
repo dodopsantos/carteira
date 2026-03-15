@@ -1,25 +1,50 @@
-export interface Crafts {
-  Page: number;
-  count: number;
-  Values: Array<Values>;
-  total: number;
-}
-interface Values {
-  Icon: string;
-  Name: string;
-  ItemLossChance: number;
-  FailureChance: number;
-  ItemId: string;
-  Time: number;
-  Ingredients: Array<Item>;
-}
+// ─── Ingrediente ─────────────────────────────────────────────────────────────
 
-export interface Item {
+export type CraftIngredient = {
+  ItemId: string;
   Quantity: number;
-  ItemId: string;
-  Icon: string;
-}
+  // enriquecido no frontend quando itemsById estiver disponível
+  Icon?: string;
+  ItemName?: string;
+};
 
-export interface FilterCrafts {
+// ─── Receita individual ───────────────────────────────────────────────────────
+
+export type CraftPublicDto = {
+  Id: string;
+  Name: string;
+  Folder: string;
+
+  ItemId: string;       // GUID do item produzido
+  Quantity: number;
+
+  Time: number;           // ms
+  FailureChance: number;
+  ItemLossChance: number;
+
+  Ingredients: CraftIngredient[];
+
+  // enriquecido no frontend
+  OutputIcon?: string;
+  OutputName?: string;
+
+  Type: string;
+};
+
+// ─── Mesa de craft (com receitas populadas) ───────────────────────────────────
+
+export type CraftTableDto = {
+  Id: string;
+  Name: string;
+  Folder: string;      // localização da mesa (ex: "Jinta", "Hollow")
+  Crafts: CraftPublicDto[];
+  Type: string;
+};
+
+export type Crafts = CraftTableDto[];
+
+// ─── Filtro ───────────────────────────────────────────────────────────────────
+
+export type FilterCrafts = {
   search: string;
-}
+};

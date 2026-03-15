@@ -9,9 +9,10 @@ import PlayableClasses from './components/playableClasses';
 import { ArrowIndicator } from '@components/ArrowIndicator/arrowIndicator';
 import { Heading } from '@components/Heading';
 import { Text } from '@components/Text';
+import { ServerStatusBadge } from '@components/ServerStatusBadge';
 
 export default function Homepage(): JSX.Element {
-  const [background, setBackground] = useState<Number>(0);
+  const [background, setBackground] = useState<number>(0);
 
   return (
     <>
@@ -208,6 +209,9 @@ export default function Homepage(): JSX.Element {
           <Effects />
         </div>
       </section>
+
+      {/* FLOATING — Status do servidor */}
+      <ServerStatusBadge />
     </>
   );
 }

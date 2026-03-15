@@ -1,28 +1,20 @@
 import { Text } from '@components/Text';
-import { FilterNpc, Npcs, NpcPublicDto, NpcDropDto } from '@interfaces/npcs';
+import { FilterNpc, Npcs } from '@interfaces/npcs';
+import { Items } from '@interfaces/items';
 import Image from 'next/image';
 import React, { ReactElement, useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { X, MagnifyingGlass } from 'phosphor-react';
 
 interface Props {
   npcs: Npcs;
   filter: FilterNpc;
+  items?: Items;
 }
 
-const PAGE_SIZE = 15;
+const PAGE_SIZE = 16;
 
-type SortDir = 'asc' | 'desc';
-type SortKey =
-  | 'name'
-  | 'experience'
-  | 'spawn'
-  | 'atk'
-  | 'ap'
-  | 'def'
-  | 'mr'
-  | 'spd'
-  | 'hp'
-  | 'mp'
-  | 'drops';
+// ─── Helpers ────────────────────────────────────────────────────────────────
 
 function toNum(v: any, fallback = 0) {
   const n = Number(v);
@@ -31,407 +23,445 @@ function toNum(v: any, fallback = 0) {
 
 function getStats(stats: any) {
   return {
-    atk: toNum(stats?.Attack, 0),
-    ap: toNum(stats?.AbilityPower, 0),
-    def: toNum(stats?.Defense, 0),
-    mr: toNum(stats?.MagicResist, 0),
-    spd: toNum(stats?.Speed, 0)
+    atk: toNum(stats?.Attack),
+    ap:  toNum(stats?.AbilityPower),
+    def: toNum(stats?.Defense),
+    mr:  toNum(stats?.MagicResist),
+    spd: toNum(stats?.Speed),
   };
 }
 
 function getVitals(vitals: any) {
   return {
-    hp: toNum(vitals?.Health, 0),
-    mp: toNum(vitals?.Mana, 0)
+    hp: toNum(vitals?.Health),
+    mp: toNum(vitals?.Mana),
   };
 }
 
-function dropsCount(drops: any) {
-  return Array.isArray(drops) ? drops.length : 0;
+function formatSpawn(ms: number): string {
+  if (ms <= 0) return '—';
+  const s = Math.round(ms / 1000);
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s / 60);
+  const rem = s % 60;
+  return rem > 0 ? `${m}m ${rem}s` : `${m}m`;
 }
 
-function sortCompare(a: any, b: any, key: SortKey, dir: SortDir) {
-  const mult = dir === 'asc' ? 1 : -1;
+// ─── StatRow ────────────────────────────────────────────────────────────────
 
-  const an = String(a?.Name ?? '');
-  const bn = String(b?.Name ?? '');
-
-  const aStats = getStats(a?.Stats);
-  const bStats = getStats(b?.Stats);
-
-  const aVit = getVitals(a?.MaxVitals);
-  const bVit = getVitals(b?.MaxVitals);
-
-  let av: any;
-  let bv: any;
-
-  switch (key) {
-    case 'name':
-      return mult * an.localeCompare(bn, 'pt-BR', { sensitivity: 'base' });
-
-    case 'experience':
-      av = toNum(a?.Experience, 0);
-      bv = toNum(b?.Experience, 0);
-      break;
-
-    case 'spawn':
-      // backend parece vir em ms, mas aqui só ordenamos valor bruto
-      av = toNum(a?.SpawnDuration, 0);
-      bv = toNum(b?.SpawnDuration, 0);
-      break;
-
-    case 'atk':
-      av = aStats.atk;
-      bv = bStats.atk;
-      break;
-
-    case 'ap':
-      av = aStats.ap;
-      bv = bStats.ap;
-      break;
-
-    case 'def':
-      av = aStats.def;
-      bv = bStats.def;
-      break;
-
-    case 'mr':
-      av = aStats.mr;
-      bv = bStats.mr;
-      break;
-
-    case 'spd':
-      av = aStats.spd;
-      bv = bStats.spd;
-      break;
-
-    case 'hp':
-      av = aVit.hp;
-      bv = bVit.hp;
-      break;
-
-    case 'mp':
-      av = aVit.mp;
-      bv = bVit.mp;
-      break;
-
-    case 'drops':
-      av = dropsCount(a?.Drops);
-      bv = dropsCount(b?.Drops);
-      break;
-
-    default:
-      return mult * an.localeCompare(bn, 'pt-BR', { sensitivity: 'base' });
-  }
-
-  if (av === bv) {
-    return mult * an.localeCompare(bn, 'pt-BR', { sensitivity: 'base' });
-  }
-  return mult * (av > bv ? 1 : -1);
+function StatRow({ label, value, color = 'text-slate-100' }: { label: string; value: string | number; color?: string }) {
+  return (
+    <div className="flex items-center justify-between py-1.5 border-b border-white/5 last:border-0">
+      <Text className="text-xs text-slate-500">{label}</Text>
+      <Text className={`text-xs font-semibold tabular-nums ${color}`}>{value}</Text>
+    </div>
+  );
 }
 
-export default function GridNPCs({ npcs: allNpcs, filter }: Props): ReactElement {
-  const [pagination, setPagination] = useState<number>(1);
-  const [sortKey, setSortKey] = useState<SortKey>('name');
-  const [sortDir, setSortDir] = useState<SortDir>('asc');
+// ─── NpcModal ───────────────────────────────────────────────────────────────
+
+function NpcModal({
+  npc,
+  itemsById,
+  onClose,
+}: {
+  npc: any;
+  itemsById: Map<string, any>;
+  onClose: () => void;
+}) {
+  const stats  = getStats(npc?.Stats);
+  const vitals = getVitals(npc?.MaxVitals);
+  const drops: any[] = Array.isArray(npc?.Drops) ? npc.Drops : [];
+  const aggressive: boolean = npc?.Aggressive === true;
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  // Enriquece drop com dados do item se disponível
+  function resolveItem(drop: any) {
+    // Já enriquecido pelo wiki/index.tsx (quando Id estiver disponível)
+    if (drop?.ItemName && drop?.Icon) return drop;
+    // Fallback: tenta pelo itemsById local
+    if (drop?.ItemId && itemsById.size > 0) {
+      const found = itemsById.get(drop.ItemId);
+      if (found) return { ...drop, ItemName: found.Name, Icon: found.Icon };
+    }
+    return drop;
+  }
+
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4 sm:p-4">
+      <button
+        type="button"
+        aria-label="Fechar"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-black/90 shadow-2xl shadow-black/60 my-auto">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-500/40 to-transparent" />
+
+        {/* Header */}
+        <div className="flex items-start gap-4 p-5 border-b border-white/8">
+          <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-xl border border-white/10 bg-slate-900/80">
+            {npc?.Sprite ? (
+              <Image
+                alt={npc.Name ?? 'NPC'}
+                src={`/items/${npc.Sprite}`}
+                width={44}
+                height={44}
+                quality={100}
+              />
+            ) : (
+              <div className="h-10 w-10 rounded-lg bg-white/5" />
+            )}
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <Text className="text-lg font-extrabold text-slate-50 leading-tight">
+              {npc?.Name || 'NPC sem nome'}
+            </Text>
+            <div className="mt-1.5 flex flex-wrap items-center gap-2">
+              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[0.65rem] text-slate-400">
+                Nível {toNum(npc?.Level, 1)}
+              </span>
+              <span className={`rounded-full border px-2.5 py-0.5 text-[0.65rem] font-semibold ${
+                aggressive
+                  ? 'border-red-500/30 bg-red-500/10 text-red-300'
+                  : 'border-teal-500/30 bg-teal-500/10 text-teal-300'
+              }`}>
+                {aggressive ? 'Agressivo' : 'Passivo'}
+              </span>
+              {toNum(npc?.Experience) > 0 && (
+                <span className="rounded-full border border-amber-500/25 bg-amber-500/10 px-2.5 py-0.5 text-[0.65rem] font-semibold text-amber-300">
+                  {toNum(npc.Experience).toLocaleString('pt-BR')} EXP
+                </span>
+              )}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-slate-200 transition-colors"
+          >
+            <X size={14} />
+          </button>
+        </div>
+
+        {/* Corpo */}
+        <div className="p-5 space-y-5 max-h-[50vh] sm:max-h-[65vh] overflow-y-auto">
+
+          {/* Vitais */}
+          <div>
+            <Text className="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-500">
+              Vitais
+            </Text>
+            <div className="rounded-xl border border-white/5 bg-slate-900/60 px-4 py-1">
+              <StatRow label="HP"  value={vitals.hp.toLocaleString('pt-BR')} color="text-emerald-300" />
+              {vitals.mp > 0 && <StatRow label="MP" value={vitals.mp.toLocaleString('pt-BR')} color="text-blue-300" />}
+            </div>
+          </div>
+
+          {/* Atributos */}
+          {(stats.atk > 0 || stats.ap > 0 || stats.def > 0 || stats.mr > 0 || stats.spd > 0) && (
+            <div>
+              <Text className="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Atributos
+              </Text>
+              <div className="rounded-xl border border-white/5 bg-slate-900/60 px-4 py-1">
+                {stats.atk > 0 && <StatRow label="Ataque"         value={stats.atk} color="text-red-300" />}
+                {stats.ap  > 0 && <StatRow label="Poder Mágico"   value={stats.ap}  color="text-purple-300" />}
+                {stats.def > 0 && <StatRow label="Defesa"         value={stats.def} color="text-blue-300" />}
+                {stats.mr  > 0 && <StatRow label="Resist. Mágica" value={stats.mr}  color="text-teal-300" />}
+                {stats.spd > 0 && <StatRow label="Velocidade"     value={stats.spd} color="text-sky-300" />}
+              </div>
+            </div>
+          )}
+
+          {/* Combate */}
+          {(toNum(npc?.Damage) > 0 || toNum(npc?.CritChance) > 0) && (
+            <div>
+              <Text className="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Combate
+              </Text>
+              <div className="rounded-xl border border-white/5 bg-slate-900/60 px-4 py-1">
+                {toNum(npc?.Damage) > 0     && <StatRow label="Dano"        value={toNum(npc.Damage)}           color="text-red-300" />}
+                {toNum(npc?.CritChance) > 0 && <StatRow label="Chance Crit" value={`${toNum(npc.CritChance)}%`} color="text-orange-300" />}
+              </div>
+            </div>
+          )}
+
+          {/* Spawn */}
+          {toNum(npc?.SpawnDuration) > 0 && (
+            <div>
+              <Text className="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Spawn
+              </Text>
+              <div className="rounded-xl border border-white/5 bg-slate-900/60 px-4 py-1">
+                <StatRow label="Tempo de respawn" value={formatSpawn(toNum(npc.SpawnDuration))} color="text-slate-300" />
+              </div>
+            </div>
+          )}
+
+          {/* Drops */}
+          <div>
+            <Text className="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-500">
+              Drops {drops.length > 0 && <span className="text-slate-600">({drops.length})</span>}
+            </Text>
+
+            {drops.length === 0 ? (
+              <div className="rounded-xl border border-white/5 bg-slate-900/40 px-4 py-5 text-center">
+                <Text className="text-xs text-slate-600">Este NPC não possui drops.</Text>
+              </div>
+            ) : (
+              <ul className="space-y-2">
+                {drops.map((rawDrop: any, i: number) => {
+                  const drop = resolveItem(rawDrop);
+                  const icon      = typeof drop?.Icon === 'string' ? drop.Icon : null;
+                  // Quando o Id do item estiver disponível na API, ItemName virá preenchido.
+                  // Por ora, exibe o ItemId como fallback legível.
+                  const itemName  = typeof drop?.ItemName === 'string'
+                    ? drop.ItemName
+                    : `ID: ${String(drop?.ItemId ?? '—').slice(0, 8)}…`;
+                  const chance    = toNum(drop?.Chance);
+                  const minQ      = toNum(drop?.MinQuantity);
+                  const maxQ      = toNum(drop?.MaxQuantity);
+                  const qty       = minQ === maxQ ? `x${minQ}` : `x${minQ}–${maxQ}`;
+
+                  // cor da chance
+                  const chanceColor =
+                    chance >= 75 ? 'text-emerald-300 border-emerald-500/30 bg-emerald-500/10' :
+                    chance >= 40 ? 'text-amber-300  border-amber-500/30  bg-amber-500/10'  :
+                                   'text-red-300    border-red-500/30    bg-red-500/10';
+
+                  return (
+                    <li
+                      key={`${drop?.ItemId ?? i}-${i}`}
+                      className="flex items-center gap-3 rounded-xl border border-white/5 bg-slate-900/60 px-3 py-2.5"
+                    >
+                      {/* ícone do item */}
+                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-white/8 bg-black/40">
+                        {icon ? (
+                          <Image alt={itemName} src={`/items/${icon}`} width={28} height={28} quality={100} />
+                        ) : (
+                          // placeholder enquanto o Id do item não vem da API
+                          <div className="h-7 w-7 rounded-md bg-white/10" />
+                        )}
+                      </div>
+
+                      {/* nome + quantidade */}
+                      <div className="flex-1 min-w-0">
+                        <Text className="truncate text-sm font-semibold text-slate-100">
+                          {itemName}
+                        </Text>
+                        <Text className="text-xs text-slate-500">{qty}</Text>
+                      </div>
+
+                      {/* chance */}
+                      <span className={`flex-shrink-0 rounded-full border px-2.5 py-0.5 text-[0.65rem] font-bold tabular-nums ${chanceColor}`}>
+                        {chance}%
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>,
+    typeof document !== "undefined" ? document.body : null as any
+  );
+}
+
+// ─── NpcCard ─────────────────────────────────────────────────────────────────
+
+function NpcCard({ npc, onClick }: { npc: any; onClick: () => void }) {
+  const vitals    = getVitals(npc?.MaxVitals);
+  const drops     = Array.isArray(npc?.Drops) ? npc.Drops : [];
+  const aggressive = npc?.Aggressive === true;
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group relative flex flex-col items-center gap-2.5 rounded-xl border border-white/10 bg-slate-900/60 p-4 text-center transition-all duration-200 hover:scale-[1.03] hover:bg-slate-900/90 hover:border-white/20"
+    >
+      {/* Sprite */}
+      <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-white/10 bg-black/40">
+        {npc?.Sprite ? (
+          <Image
+            alt={npc?.Name ?? 'NPC'}
+            src={`/items/${npc.Sprite}`}
+            width={40}
+            height={40}
+            quality={100}
+          />
+        ) : (
+          <div className="h-8 w-8 rounded-lg bg-white/10" />
+        )}
+      </div>
+
+      {/* Nome */}
+      <Text className="w-full truncate text-xs font-semibold text-slate-100 leading-tight">
+        {npc?.Name || 'NPC sem nome'}
+      </Text>
+
+      {/* Nível + agressividade */}
+      <div className="flex items-center gap-1.5 flex-wrap justify-center">
+        <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[0.6rem] text-slate-400">
+          Lv {toNum(npc?.Level, 1)}
+        </span>
+        {aggressive && (
+          <span className="rounded-full border border-red-500/30 bg-red-500/10 px-2 py-0.5 text-[0.6rem] font-semibold text-red-300">
+            Agr
+          </span>
+        )}
+      </div>
+
+      {/* HP + drops */}
+      <div className="flex items-center gap-3 text-[0.6rem] text-slate-500">
+        <span className="text-emerald-400/80">HP {vitals.hp.toLocaleString('pt-BR')}</span>
+        {drops.length > 0 && (
+          <span className="text-amber-400/70">{drops.length} drop{drops.length !== 1 ? 's' : ''}</span>
+        )}
+      </div>
+
+      <span className="absolute inset-x-0 bottom-1 text-[0.55rem] text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity">
+        clique para detalhes
+      </span>
+    </button>
+  );
+}
+
+// ─── GridNPCs ────────────────────────────────────────────────────────────────
+
+export default function GridNPCs({ npcs: allNpcs, filter, items = [] }: Props): ReactElement {
+  const [page, setPage]         = useState(1);
+  const [selected, setSelected] = useState<any>(null);
+
+  // Mapa ItemId → item (futuro: quando a API retornar Id no item)
+  const itemsById = useMemo(() => {
+    const map = new Map<string, any>();
+    (items ?? []).forEach((item: any) => {
+      if (typeof item?.Id === 'string')     map.set(item.Id, item);
+      if (typeof item?.ItemId === 'string') map.set(item.ItemId, item);
+    });
+    return map;
+  }, [items]);
 
   const filtered = useMemo(() => {
     const q = (filter.search ?? '').trim().toLowerCase();
+    if (!q) return allNpcs ?? [];
 
-    const arr = (allNpcs ?? []).filter((npc: any) => {
-      if (!q) return true;
-
+    return (allNpcs ?? []).filter((npc: any) => {
       const nameMatch = String(npc?.Name ?? '').toLowerCase().includes(q);
-
-      const dropsMatch =
-        Array.isArray(npc?.Drops) &&
-        npc.Drops.some((d: unknown) => {
-          const id = (d as any)?.ItemId;
-          const itemName = (d as any)?.ItemName;
-          return (
-            (typeof id === 'string' && id.toLowerCase().includes(q)) ||
-            (typeof itemName === 'string' && itemName.toLowerCase().includes(q))
-          );
-        });
-
-      return nameMatch || dropsMatch;
+      const dropMatch = Array.isArray(npc?.Drops) && npc.Drops.some((d: any) => {
+        const resolved = itemsById.get(d?.ItemId);
+        return (
+          (typeof d?.ItemName === 'string' && d.ItemName.toLowerCase().includes(q)) ||
+          (resolved && String(resolved?.Name ?? '').toLowerCase().includes(q))
+        );
+      });
+      return nameMatch || dropMatch;
     });
+  }, [allNpcs, filter.search, itemsById]);
 
-    return [...arr].sort((a, b) => sortCompare(a, b, sortKey, sortDir));
-  }, [allNpcs, filter.search, sortKey, sortDir]);
+  useEffect(() => { setPage(1); }, [filter.search]);
 
-  // reset page ao mudar filtro / sort
-  useEffect(() => {
-    setPagination(1);
-  }, [filter.search, sortKey, sortDir]);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
 
-  const totalPages = useMemo(() => {
-    const pages = Math.ceil(filtered.length / PAGE_SIZE);
-    return pages <= 0 ? 0 : pages;
-  }, [filtered.length]);
-
-  // mantém pagination válida
-  useEffect(() => {
-    if (totalPages === 0) {
-      if (pagination !== 1) setPagination(1);
-      return;
-    }
-    if (pagination > totalPages) setPagination(1);
-    if (pagination < 1) setPagination(1);
-  }, [totalPages, pagination]);
-
-  const startIndex = useMemo(() => {
-    if (totalPages === 0) return 0;
-    return (pagination - 1) * PAGE_SIZE;
-  }, [pagination, totalPages]);
+  useEffect(() => { if (page > totalPages) setPage(1); }, [totalPages, page]);
 
   const pageItems = useMemo(() => {
-    if (totalPages === 0) return [];
-    return filtered.slice(startIndex, startIndex + PAGE_SIZE);
-  }, [filtered, startIndex, totalPages]);
+    const start = (page - 1) * PAGE_SIZE;
+    return filtered.slice(start, start + PAGE_SIZE);
+  }, [filtered, page]);
 
-  const emptyRowsCount = Math.max(0, PAGE_SIZE - pageItems.length);
-
-  const toggleSort = (key: SortKey) => {
-    if (sortKey !== key) {
-      setSortKey(key);
-      setSortDir('asc');
-      return;
-    }
-    setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
-  };
-
-  const SortHeader = ({
-    label,
-    keyName,
-    align = 'left'
-  }: {
-    label: string;
-    keyName: SortKey;
-    align?: 'left' | 'center' | 'right';
-  }) => {
-    const isActive = sortKey === keyName;
-    const arrow = isActive ? (sortDir === 'asc' ? '▲' : '▼') : '';
-
-    return (
-      <button
-        type="button"
-        onClick={() => toggleSort(keyName)}
-        className={`inline-flex items-center gap-2 text-xs tracking-wide text-white/80 hover:text-white ${align === 'center' ? 'justify-center w-full' : ''
-          }`}
-        title="Ordenar"
-      >
-        <span>{label}</span>
-        <span className={`text-[10px] ${isActive ? 'text-white/70' : 'text-white/30'}`}>
-          {arrow || '↕'}
-        </span>
-      </button>
-    );
-  };
-
-  const renderVitals = (npc: NpcPublicDto) => {
-    const v = getVitals((npc as any)?.MaxVitals);
-    return (
-      <Text size="sm" className="text-white/80">
-        HP {v.hp}, MP {v.mp}
-      </Text>
-    );
-  };
-
-  const renderStats = (npc: NpcPublicDto) => {
-    const s = getStats((npc as any)?.Stats);
-    return (
-      <Text size="sm" className="text-white/80">
-        ATK {s.atk}, AP {s.ap}, DEF {s.def}, MR {s.mr}, SPD {s.spd}
-      </Text>
-    );
-  };
-
-  const renderDrops = (drops: NpcDropDto[]) => {
-    if (!Array.isArray(drops) || drops.length === 0) {
-      return <Text size="sm" className="text-white/60">-</Text>;
-    }
-
-    // clean: mostra até 2 drops (estilo tibia), e o restante vira “+X”
-    const maxShow = 2;
-    const show = drops.slice(0, maxShow);
-    const rest = drops.length - show.length;
-
-    return (
-      <div className="flex flex-col gap-2">
-        {show.map((drop, idx) => {
-          const d: any = drop;
-          const icon = typeof d.Icon === 'string' ? d.Icon : '';
-          const label =
-            typeof d.ItemName === 'string'
-              ? d.ItemName
-              : typeof d.ItemId === 'string'
-                ? d.ItemId
-                : '-';
-
-          const chance = typeof d.Chance === 'number' ? d.Chance : 0;
-          const minQ = typeof d.MinQuantity === 'number' ? d.MinQuantity : 0;
-          const maxQ = typeof d.MaxQuantity === 'number' ? d.MaxQuantity : 0;
-
-          return (
-            <div key={`${label}-${idx}`} className="flex items-center gap-2">
-              <div className="h-9 w-9 rounded-lg border border-white/10 bg-white/5 p-1">
-                {icon ? (
-                  <Image alt={label} src={`/items/${icon}`} width={32} height={32} quality={100} />
-                ) : (
-                  <div className="h-8 w-8" />
-                )}
-              </div>
-
-              <Text size="sm" className="text-white/80">
-                {label} • {chance}%
-                {minQ || maxQ ? ` • ${minQ}-${maxQ}` : ''}
-              </Text>
-            </div>
-          );
-        })}
-
-        {rest > 0 && (
-          <Text size="sm" className="text-white/60">
-            +{rest} drop(s)
-          </Text>
-        )}
-      </div>
-    );
-  };
+  const pageButtons = useMemo(() => {
+    if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    if (page <= 3)                  return [1, 2, 3, 4, 5];
+    if (page >= totalPages - 2)     return [totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    return [page - 2, page - 1, page, page + 1, page + 2];
+  }, [totalPages, page]);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-white/10">
-      <div className="relative overflow-x-auto">
-        <table className="w-full text-left text-sm">
-          <thead className="sticky top-0 z-10 bg-white/5 uppercase text-white/70 backdrop-blur">
-            <tr>
-              <th className="px-4 py-3">
-                <SortHeader label="NPC" keyName="name" />
-              </th>
+    <>
+      {filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
+          <MagnifyingGlass size={32} weight="thin" className="text-slate-600" />
+          <Text className="text-sm text-slate-500">Nenhum NPC encontrado.</Text>
+          <Text className="text-xs text-slate-600">Tente ajustar a busca.</Text>
+        </div>
+      ) : (
+        <>
+          <div className="grid gap-3" style={{gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))"}}>
+            {pageItems.map((npc: any, idx: number) => (
+              <NpcCard
+                key={`${npc?.Name ?? 'npc'}-${idx}`}
+                npc={npc}
+                onClick={() => setSelected(npc)}
+              />
+            ))}
+          </div>
 
-              <th className="px-4 py-3 text-center">
-                <SortHeader label="EXP" keyName="experience" align="center" />
-              </th>
+          {/* Paginação */}
+          <div className="mt-5 flex items-center justify-between border-t border-white/8 pt-4">
+            <Text className="text-[0.7rem] text-slate-500">
+              {filtered.length} NPC{filtered.length !== 1 ? 's' : ''}
+              {' · '}pág. {page}/{totalPages}
+            </Text>
 
-              <th className="px-4 py-3 text-center">
-                <SortHeader label="Spawn" keyName="spawn" align="center" />
-              </th>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition hover:bg-white/10 disabled:opacity-30"
+              >
+                ‹
+              </button>
 
-              <th className="px-4 py-3">
-                <SortHeader label="Stats" keyName="atk" />
-              </th>
-
-              <th className="px-4 py-3">
-                <SortHeader label="Vitals" keyName="hp" />
-              </th>
-
-              <th className="px-4 py-3">
-                <SortHeader label="Drops" keyName="drops" />
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {pageItems.map((npc: any, idx: number) => {
-              const rowBg = idx % 2 === 0 ? 'bg-black/15' : 'bg-black/25';
-
-              const globalIndex = startIndex + idx;
-              const key = `${npc?.Id ?? npc?.Name ?? 'npc'}-${globalIndex}`;
-
-              return (
-                <tr key={key} className={`border-t border-white/10 ${rowBg}`}>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-lg border border-white/10 bg-white/5 p-1">
-                        <Image
-                          alt={npc?.Name ?? 'NPC'}
-                          src={`/items/${npc?.Sprite}`}
-                          width={32}
-                          height={32}
-                          quality={100}
-                        />
-                      </div>
-
-                      <div className="min-w-0">
-                        <Text className="truncate text-white">{npc?.Name ?? '-'}</Text>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td className="px-4 py-3 text-center">
-                    <Text size="sm" className="text-white/80">
-                      {toNum(npc?.Experience, 0)}
-                    </Text>
-                  </td>
-
-                  <td className="px-4 py-3 text-center">
-                    <Text size="sm" className="text-white/80">
-                      {Math.round(toNum(npc?.SpawnDuration, 0) / 1000)}s
-                    </Text>
-                  </td>
-
-                  <td className="px-4 py-3">{renderStats(npc)}</td>
-                  <td className="px-4 py-3">{renderVitals(npc)}</td>
-                  <td className="px-4 py-3">{renderDrops(npc?.Drops)}</td>
-                </tr>
-              );
-            })}
-
-            {/* altura fixa */}
-            {emptyRowsCount > 0 &&
-              Array.from({ length: emptyRowsCount }).map((_, i) => (
-                <tr
-                  key={`empty-${startIndex}-${i}`}
-                  className="border-t border-white/10 bg-black/10"
+              {pageButtons.map(p => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setPage(p)}
+                  className={`h-8 min-w-[2rem] rounded-lg border px-2 text-xs font-semibold transition ${
+                    page === p
+                      ? 'border-teal-500/40 bg-teal-500/15 text-teal-300'
+                      : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-slate-200'
+                  }`}
                 >
-                  <td className="px-4 py-3" colSpan={6}>
-                    <div className="h-6" />
-                  </td>
-                </tr>
+                  {p}
+                </button>
               ))}
 
-            {/* vazio */}
-            {filtered.length === 0 && (
-              <tr className="border-t border-white/10 bg-black/10">
-                <td className="px-4 py-6" colSpan={6}>
-                  <Text className="text-white/70">Nenhum NPC encontrado.</Text>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* paginação */}
-      <div className="flex items-center justify-between border-t border-white/10 bg-black/20 px-3 py-2">
-        <Text size="sm" className="text-white/60">
-          {filtered.length} npcs
-        </Text>
-
-        <div className="flex items-center gap-1">
-          {totalPages === 0 ? (
-            <Text size="sm" className="text-white/50">
-              -
-            </Text>
-          ) : (
-            Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
-                key={`page-${page}`}
                 type="button"
-                onClick={() => setPagination(page)}
-                className={`h-8 min-w-[2rem] rounded-md border px-2 text-xs transition
-                  ${pagination === page
-                    ? 'border-white/20 bg-white/10 text-white'
-                    : 'border-white/10 bg-black/30 text-white/70 hover:bg-black/40'
-                  }`}
+                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition hover:bg-white/10 disabled:opacity-30"
               >
-                {page}
+                ›
               </button>
-            ))
-          )}
-        </div>
-      </div>
-    </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Modal */}
+      {selected && (
+        <NpcModal
+          npc={selected}
+          itemsById={itemsById}
+          onClose={() => setSelected(null)}
+        />
+      )}
+    </>
   );
 }
