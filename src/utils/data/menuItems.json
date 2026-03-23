@@ -1,10 +1,6 @@
 [
-  { "title": "Início", "to": "/" },
-  {
-    "title": "Patch Notes",
-    "to": "/#patch-notes"
-  },
-  { "title": "Wiki", "to": "/wiki", "disabled": false },
-  { "title": "Minha Conta", "to": "/account", "disabled": false },
-  { "title": "Discord", "to": "https://discord.gg/wXKQk8QtwK" }
+  { "title": "Início",      "to": "/" },
+  { "title": "Patch Notes", "to": "/#patch-notes" },
+  { "title": "Wiki",        "to": "/wiki" },
+  { "title": "Discord",     "to": "https://discord.gg/wXKQk8QtwK" }
 ]

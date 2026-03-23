@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, MagnifyingGlass } from 'phosphor-react';
+import { assetItem, assetNpc } from '@utils/assets';
 
 interface Props {
   npcs: Npcs;
@@ -13,6 +14,26 @@ interface Props {
 }
 
 const PAGE_SIZE = 16;
+
+// ─── NpcSprite ───────────────────────────────────────────────────────────────
+// Paperdoll spritesheet 4×4 — frame 0 (topo-esquerdo) = frente/parado
+
+function NpcSprite({ sprite, name, size = 40 }: { sprite: string; name: string; size?: number }) {
+  return (
+    <div
+      title={name}
+      style={{
+        width: size,
+        height: size,
+        backgroundImage: `url(\${assetNpc(sprite)})`,
+        backgroundPosition: '0 0',
+        backgroundSize: `${4 * size}px ${4 * size}px`,
+        backgroundRepeat: 'no-repeat',
+        imageRendering: 'pixelated',
+      }}
+    />
+  );
+}
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -108,13 +129,7 @@ function NpcModal({
         <div className="flex items-start gap-4 p-5 border-b border-white/8">
           <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-xl border border-white/10 bg-slate-900/80">
             {npc?.Sprite ? (
-              <Image
-                alt={npc.Name ?? 'NPC'}
-                src={`/items/${npc.Sprite}`}
-                width={44}
-                height={44}
-                quality={100}
-              />
+              <NpcSprite sprite={npc.Sprite} name={npc.Name ?? 'NPC'} size={44} />
             ) : (
               <div className="h-10 w-10 rounded-lg bg-white/5" />
             )}
@@ -246,7 +261,7 @@ function NpcModal({
                       {/* ícone do item */}
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-white/8 bg-black/40">
                         {icon ? (
-                          <Image alt={itemName} src={`/items/${icon}`} width={28} height={28} quality={100} />
+                          <Image alt={itemName} src={assetItem(icon)} width={28} height={28} quality={100} />
                         ) : (
                           // placeholder enquanto o Id do item não vem da API
                           <div className="h-7 w-7 rounded-md bg-white/10" />
@@ -294,13 +309,7 @@ function NpcCard({ npc, onClick }: { npc: any; onClick: () => void }) {
       {/* Sprite */}
       <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-white/10 bg-black/40">
         {npc?.Sprite ? (
-          <Image
-            alt={npc?.Name ?? 'NPC'}
-            src={`/items/${npc.Sprite}`}
-            width={40}
-            height={40}
-            quality={100}
-          />
+          <NpcSprite sprite={npc.Sprite} name={npc?.Name ?? 'NPC'} size={40} />
         ) : (
           <div className="h-8 w-8 rounded-lg bg-white/10" />
         )}

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Text } from '@components/Text';
 import { X, WarningCircle } from 'phosphor-react';
 import { StashGrid, StashItem } from '@modules/market/StashGrid';
+import { assetItem } from '@utils/assets';
 
 export type CreateListingInput = {
   itemId: number;
@@ -86,7 +87,7 @@ export function CreateListingModal({
       await onCreate({
         slot: selected!.slot,
         itemId: selected!.itemId,
-        imageUrl: `/items/${selected!.itemId}.png`,
+        imageUrl: assetItem(`${selected!.itemId}.png`),
         currency,
         unitPrice,
         quantity: safeQuantity,
@@ -204,7 +205,7 @@ export function CreateListingModal({
                   <div className="h-16 w-16 rounded-xl border border-white/10 bg-black/60 flex items-center justify-center">
                     {selected ? (
                       <img
-                        src={`/items/${selected.itemId}.png`}
+                        src={assetItem(`${selected.itemId}.png`)}
                         alt="Item selecionado"
                         className="h-14 w-14 object-contain"
                         draggable={false}

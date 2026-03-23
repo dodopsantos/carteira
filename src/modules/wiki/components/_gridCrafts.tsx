@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Text } from '@components/Text';
 import { X, MagnifyingGlass, ClockCounterClockwise } from 'phosphor-react';
 import { Crafts, FilterCrafts, CraftPublicDto, CraftTableDto } from '@interfaces/crafts';
+import { assetItem } from '@utils/assets';
 
 interface Props {
   crafts: Crafts;
@@ -52,7 +53,7 @@ function CraftModal({ craft, tableName, onClose }: { craft: CraftPublicDto; tabl
         <div className="flex items-start gap-4 p-5 border-b border-white/8">
           <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-xl border border-teal-500/25 bg-teal-500/10">
             {craft.OutputIcon ? (
-              <Image alt={craft.OutputName ?? craft.Name} src={`/items/${craft.OutputIcon}`} width={44} height={44} quality={100} />
+              <Image alt={craft.OutputName ?? craft.Name} src={assetItem(craft.OutputIcon)} width={44} height={44} quality={100} />
             ) : (
               <div className="h-10 w-10 rounded-lg bg-white/10" />
             )}
@@ -114,7 +115,7 @@ function CraftModal({ craft, tableName, onClose }: { craft: CraftPublicDto; tabl
                   <li key={`${ing.ItemId}-${i}`} className="flex items-center gap-3 rounded-xl border border-white/5 bg-slate-900/60 px-3 py-2.5">
                     <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-white/8 bg-black/40">
                       {ing.Icon ? (
-                        <Image alt={ing.ItemName ?? ing.ItemId} src={`/items/${ing.Icon}`} width={28} height={28} quality={100} />
+                        <Image alt={ing.ItemName ?? ing.ItemId} src={assetItem(ing.Icon)} width={28} height={28} quality={100} />
                       ) : (
                         <div className="h-7 w-7 rounded-md bg-white/10" />
                       )}
@@ -151,7 +152,7 @@ function CraftCard({ craft, onClick }: { craft: CraftPublicDto; onClick: () => v
       {/* Ícone do item produzido */}
       <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-teal-500/20 bg-teal-500/10">
         {craft.OutputIcon ? (
-          <Image alt={craft.Name} src={`/items/${craft.OutputIcon}`} width={40} height={40} quality={100} />
+          <Image alt={craft.Name} src={assetItem(craft.OutputIcon)} width={40} height={40} quality={100} />
         ) : (
           <div className="h-8 w-8 rounded-lg bg-white/10" />
         )}

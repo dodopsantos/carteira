@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
+import Link from 'next/link';
 
 import { Text } from '@components/Text';
 import { Heading } from '@components/Heading';
@@ -276,12 +277,12 @@ export function Login({ signIn }: LoginProps) {
               </a>
             </Text>
             <Text asChild size="sm">
-              <a
-                href="#"
+              <Link
+                href="/register"
                 className="text-gray-400 underline underline-offset-2 hover:text-teal-300"
               >
-                Não possui conta? Fale com um administrador.
-              </a>
+                Não possui conta? Cadastre-se aqui.
+              </Link>
             </Text>
           </footer>
         </div>

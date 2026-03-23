@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import { Text } from '@components/Text';
@@ -11,8 +11,10 @@ import {
   ShoppingBag,
   ChatCircleDots,
   SignOut,
+  Lock,
   X
 } from 'phosphor-react';
+import { AuthContext } from '@contexts/AuthContext';
 
 export type AccountSidebarActive =
   | 'profile'
@@ -24,6 +26,7 @@ export type AccountSidebarActive =
 type AccountSidebarProps = {
   active?: AccountSidebarActive;
   username?: string;
+  onChangePassword?: () => void;
 };
 
 type SidebarSectionProps = {
@@ -104,8 +107,11 @@ function SidebarItem({ label, icon, href, active, onNavigate }: SidebarItemProps
 function SidebarContent({
   active,
   username,
-  onNavigate
+  onNavigate,
+  onChangePassword,
 }: AccountSidebarProps & { onNavigate?: () => void }) {
+  const { signOut } = useContext(AuthContext);
+
   return (
     <>
       <div className="mb-4">
@@ -138,9 +144,20 @@ function SidebarContent({
           <House size={16} />
           Voltar ao site
         </Link>
+        {onChangePassword && (
+          <button
+            type="button"
+            onClick={() => { onNavigate?.(); onChangePassword(); }}
+            className="mt-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-slate-100 transition-colors"
+          >
+            <Lock size={16} className="text-teal-400" />
+            Trocar senha
+          </button>
+        )}
         <button
           type="button"
-          className="mt-2 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium border border-red-500/30 bg-red-500/15 text-red-300 hover:bg-red-500/25 transition-colors"
+          onClick={() => signOut()}
+          className="mt-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium border border-red-500/30 bg-red-500/15 text-red-300 hover:bg-red-500/25 transition-colors"
         >
           <SignOut size={16} />
           Sair da conta
@@ -152,7 +169,7 @@ function SidebarContent({
 
 /* ========= SIDEBAR ========= */
 
-export function AccountSidebar({ active = 'profile', username }: AccountSidebarProps) {
+export function AccountSidebar({ active = 'profile', username, onChangePassword }: AccountSidebarProps) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -177,7 +194,7 @@ export function AccountSidebar({ active = 'profile', username }: AccountSidebarP
 
       {/* DESKTOP SIDEBAR */}
       <aside className="hidden lg:flex w-64 flex-shrink-0 flex-col rounded-2xl border border-white/10 bg-black/80 p-5 shadow-lg shadow-black/50 backdrop-blur">
-        <SidebarContent active={active} username={username} />
+        <SidebarContent active={active} username={username} onChangePassword={onChangePassword} />
       </aside>
 
       {/* MOBILE DRAWER */}
@@ -196,7 +213,7 @@ export function AccountSidebar({ active = 'profile', username }: AccountSidebarP
                   <X size={16} />
                 </button>
               </div>
-              <SidebarContent active={active} username={username} onNavigate={() => setOpen(false)} />
+              <SidebarContent active={active} username={username} onNavigate={() => setOpen(false)} onChangePassword={onChangePassword} />
             </div>
           </div>
         </div>
