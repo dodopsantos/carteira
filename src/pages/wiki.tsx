@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import WikiPage from '@modules/wiki';
 import Layout from '@components/layout';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import { getAPIClient } from '@services/axios';
 
 import type { Items } from '@interfaces/items';
@@ -108,32 +108,10 @@ export default function Wiki({ items, npcs, crafts }: Props): JSX.Element {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  const api = getAPIClient(ctx);
-
-  // Verifica status do servidor antes de permitir acesso
+export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
   try {
-    const serverRes = await api.get('/server/status');
-    const isOnline = serverRes.data?.online === true;
+    const api = getAPIClient(ctx);
 
-    if (!isOnline) {
-      return {
-        redirect: {
-          destination: '/?maintenance=1',
-          permanent: false,
-        },
-      };
-    }
-  } catch {
-    return {
-      redirect: {
-        destination: '/?maintenance=1',
-        permanent: false,
-      },
-    };
-  }
-
-  try {
     const [itemsRes, npcsRes, craftsRes] = await Promise.all([
       api.get('/gameobjects/items/all'),
       api.get('/gameobjects/npcs/all'),
@@ -146,6 +124,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
         npcs:   toArray(npcsRes.data.npcs)     as unknown as Npcs,
         crafts: (craftsRes.data.tables ?? [])  as unknown as Crafts,
       },
+      revalidate: 3600,
     };
   } catch {
     return {
@@ -154,6 +133,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
         npcs:   [] as unknown as Npcs,
         crafts: [] as unknown as Crafts,
       },
+      revalidate: 3600,
     };
   }
 };

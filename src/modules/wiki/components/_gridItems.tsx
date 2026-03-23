@@ -6,6 +6,7 @@ import Image from 'next/image';
 import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, MagnifyingGlass } from 'phosphor-react';
+import { assetItem } from '@utils/assets';
 
 interface Props {
   items: Items;
@@ -143,7 +144,7 @@ function ItemModal({
         {/* Header */}
         <div className="flex items-start gap-4 p-5 border-b border-white/8">
           <div className={`flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-xl border ${rar.border} ${rar.bg}`}>
-            <Image alt={item.Name ?? 'Item'} src={`/items/${item.Icon}`} width={44} height={44} quality={100} />
+            <Image alt={item.Name ?? 'Item'} src={assetItem(item.Icon)} width={44} height={44} quality={100} />
           </div>
 
           <div className="flex-1 min-w-0">
@@ -252,7 +253,7 @@ function ItemModal({
                   <li key={i} className="flex items-center gap-3 rounded-xl border border-white/5 bg-slate-900/60 px-3 py-2.5">
                     <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-white/8 bg-black/40">
                       {src.sprite ? (
-                        <Image alt={src.name} src={`/items/${src.sprite}`} width={28} height={28} quality={100} />
+                        <Image alt={src.name} src={assetItem(src.sprite)} width={28} height={28} quality={100} />
                       ) : (
                         <div className="h-7 w-7 rounded-md bg-white/10" />
                       )}
@@ -330,7 +331,7 @@ function ItemCard({ item, onClick }: { item: any; onClick: () => void }) {
       <div className={`flex h-14 w-14 items-center justify-center rounded-xl border ${rar.border} ${rar.bg}`}>
         <Image
           alt={item.Name ?? 'Item'}
-          src={`/items/${item.Icon}`}
+          src={assetItem(item.Icon)}
           width={40}
           height={40}
           quality={100}

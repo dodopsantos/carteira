@@ -1,4 +1,5 @@
 import React from 'react';
+import { assetItem } from '@utils/assets';
 
 export type StashItem = {
   slot: number; // 1..100 (10x10)
@@ -66,7 +67,7 @@ export function StashGrid({
               {item ? (
                 <>
                   <img
-                    src={`/items/${item.itemId}.png`}
+                    src={assetItem(`${item.itemId}.png`)}
                     alt={`Item ${item.itemId}`}
                     className="h-14 w-14 object-contain"
                     draggable={false}

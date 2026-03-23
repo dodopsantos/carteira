@@ -1,9 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { setCookie, parseCookies } from 'nookies';
-import { sha256 } from 'js-sha256';
+import { setCookie, parseCookies, destroyCookie } from 'nookies';
 import Router from 'next/router';
-
-import { recoverUserInformation } from '@services/auth';
 import { api } from '@services/api';
 
 export type User = {
@@ -14,8 +11,8 @@ export type User = {
 };
 
 type SignInData = {
-  password: string;
   username: string;
+  password: string;
   remember?: boolean;
 };
 
@@ -23,6 +20,7 @@ type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
   signIn: (data: SignInData) => Promise<void>;
+  signOut: () => void;
 };
 
 export const AuthContext = createContext({} as AuthContextType);
@@ -31,72 +29,66 @@ export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<User | null>(null);
   const isAuthenticated = !!user;
 
+  // Recupera sessão ao carregar a página
   useEffect(() => {
-    const { 'nextauth-token': token } = parseCookies();
-    if (token) {
-      recoverUserInformation().then(response => setUser(response.user));
+    const { 'nextauth-token': token, 'nextauth-user': savedUser } = parseCookies();
+
+    if (token && savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser) as User;
+        setUser(parsed);
+
+        // Valida o token em segundo plano — silencioso
+        api.get('/auth/me', {
+          headers: { Authorization: `Bearer ${token}` },
+        }).then(res => {
+          if (res.data?.user) setUser(res.data.user);
+        }).catch((err) => {
+          // 401 = token expirado ou inválido → signOut automático
+          if (err?.response?.status === 401) {
+            signOut();
+          }
+        });
+      } catch {
+        signOut();
+      }
     }
   }, []);
 
-  async function signIn({ password, username, remember }: SignInData) {
-    try {
-      const response = await api.post('/oauth/token', {
-        grant_type: 'password',
-        username,
-        password: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'//sha256(password)
-      });
+  async function signIn({ username, password, remember }: SignInData) {
+    // Chama o BACKEND, que por sua vez autentica com o jogo
+    const response = await api.post('/auth/login', { username, password });
 
-      const token = response?.data?.access_token;
-      const expiresIn = Number(response?.data?.expires_in ?? 0);
+    const { token, expiresIn, user: userData } = response.data;
 
-      if (!token) {
-        const error: any = new Error('Token não retornado pela API.');
-        error.response = { data: { message: 'Falha ao autenticar. Tente novamente.' } };
-        throw error;
-      }
-
-      const thirtyDays = 60 * 60 * 24 * 30;
-      const maxAge = remember ? thirtyDays : (expiresIn > 0 ? expiresIn : thirtyDays);
-
-      setCookie(undefined, 'nextauth-token', token, {
-        maxAge,
-        path: '/'
-      });
-
-      api.defaults.headers['Authorization'] = `Bearer ${token}`;
-
-      Router.push('/account');
-    } catch (err: any) {
-      const status = err?.response?.status;
-
-      // tenta extrair a msg da API
-      const apiMessage =
-        err?.response?.data?.message ||
-        err?.response?.data?.error_description ||
-        err?.response?.data?.error ||
-        null;
-
-      // mensagens amigáveis por caso
-      let friendly = apiMessage ?? 'Não foi possível autenticar. Tente novamente.';
-
-      if (status === 400 || status === 401) {
-        friendly = 'Usuário ou senha inválidos.';
-      } else if (!err?.response) {
-        // sem response geralmente é rede / CORS / API offline
-        friendly = 'Sem conexão com o servidor. Verifique sua internet e tente novamente.';
-      } else if (status >= 500) {
-        friendly = 'Servidor indisponível no momento. Tente novamente mais tarde.';
-      }
-
-      // mantém o throw pra tela mostrar o erro no card
-      const error: any = new Error(friendly);
-      error.response = { ...err?.response, data: { ...err?.response?.data, message: friendly } };
-      throw error;
+    if (!token) {
+      throw new Error('Token não retornado.');
     }
+
+    const maxAge = remember ? 60 * 60 * 24 * 30 : (expiresIn > 0 ? expiresIn : 86400);
+
+    // Salva token
+    setCookie(undefined, 'nextauth-token', token, { maxAge, path: '/' });
+
+    // Salva dados do usuário (evita precisar chamar /auth/me a cada refresh)
+    setCookie(undefined, 'nextauth-user', JSON.stringify(userData), { maxAge, path: '/' });
+
+    api.defaults.headers['Authorization'] = `Bearer ${token}`;
+
+    setUser(userData);
+    Router.push('/account');
+  }
+
+  function signOut() {
+    destroyCookie(undefined, 'nextauth-token', { path: '/' });
+    destroyCookie(undefined, 'nextauth-user', { path: '/' });
+    delete api.defaults.headers['Authorization'];
+    setUser(null);
+    Router.push('/login');
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
